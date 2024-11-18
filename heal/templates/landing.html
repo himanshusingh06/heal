@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>heal</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav>
+        <div class="nav__logo">
+          <a href="#">
+            <img src="{% static 'image/heal_logo.png' %}" alt="logo" class="logo-color" />
+
+          </a>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Booking</a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+        <div class="nav__menu__btn" id="menu-btn">
+          <span><i class="ri-menu-line"></i></span>
+        </div>
+      </nav>
+      <div class="header__container">
+        <div class="header__image"></div>
+        <div class="header__content">
+          <h1>RECLAIM</h1>
+          <h2>YOUR BALANCE</h2>
+          <p>
+            Discover the transformative journey of yoga. Whether you're seeking peace, physical wellness, or mental clarity, our yoga practices are designed to rejuvenate your mind, body, and spirit. Start your path to holistic healing today!
+          </p>
+          <div>
+            <button class="btn">Explore</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="about-us">
+      <div class="about-us__container">
+        <div class="about-us__profile">
+          <img src="{% static 'image\vector-flat-illustration-grayscale-avatar-600nw-2264922221.webp' %}" alt="About Us Profile" />
+        </div>
+        <div class="about-us__content">
+          <h1>About Us</h1>
+          <p>
+            Welcome to [Your Business Name]! We specialize in [Your Specialization] and are passionate about delivering exceptional solutions tailored to your needs. 
+            <br />
+            Our mission is to innovate, inspire, and empower individuals and organizations, helping them achieve success with clarity and purpose. With a dedicated team, we ensure that every step of the journey is meaningful, impactful, and fun.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="cst-benefits">
+      <div class="cst-benefits__container">
+        <div class="cst-benefits__content">
+          <h1>CST Benefits</h1>
+          <ul>
+            <li>Reduces Chronic Lower Back Pain</li>
+            <li>Stress and Anxiety</li>
+            <li>Sleep Issues</li>
+            <li>Relieves Pain and Inflammation</li>
+            <li>Chronic Diseases: Heart Issues, Sugar, Blood Pressure, Eye Issues</li>
+            <li>Improves Teeth and Gums Health</li>
+            <li>Addresses Knees and Kidneys Problems</li>
+            <li>Facial Uplift</li>
+            <li>Helps Autism and Brain-Related Issues</li>
+            <li>Enhances CSF Movements in the Body</li>
+            <li>Supports Post and Pre-Delivery of Baby</li>
+            <li>Heals Traumatic Issues and Accidents</li>
+            <li>Reduces Inhibition and Cures Addictions</li>
+            <li>Relieves Headaches and Migraines</li>
+            <li>Improves Acidity and Digestion</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    
+    
+    
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>
