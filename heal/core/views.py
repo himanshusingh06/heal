@@ -35,4 +35,4 @@ def contact(request):
         send_mail_to_admin(user_name, user_email, mobile_number, subject, user_message)
         return redirect('home')
     else:
-        return render(request, 'contact.html')
+        return render(request, 'landing.html')
