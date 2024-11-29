@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>KM healing foundation-Our Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <style>
+    .bg-primary {
+      background-color: #EAF8F0;
+    }
+
+    .bg-button {
+      background-color: #205A28;
+    }
+
+    .bg-button-hover:hover {
+      background-color: #15491c;
+    }
+
+    .modal-bg {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 rounded-b-lg">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <!-- Logo and Title -->
+      <div class="flex items-center space-x-3">
+        <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full">
+        <h1 class="text-3xl font-bold tracking-wide">KM Healing Foundation</h1>
+      </div>
+      <!-- Hamburger Button -->
+      <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
+        ☰
+      </button>
+      <!-- Menu -->
+      <ul id="menu" class="hidden md:flex space-x-6 text-lg font-semibold">
+        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+        <li><a href="{% url 'home' %}" class="hover:underline">About Us</a></li>
+        <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
+        <li><a href="{% url 'home' %}" class="hover:underline">Contact</a></li>
+      </ul>
+    </div>
+    <!-- Dropdown for Small Screens -->
+    <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
+      <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
+      <li><a href="{% url 'home' %}" class="hover:underline block">About Us</a></li>
+      <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
+      <li><a href="{% url 'home' %}" class="hover:underline block">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Services Section -->
+
+
+
+
+
+  <section class="bg-primary py-12 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-[#205A28] text-center mb-6">Our Services</h2>
+
+        <!-- Service Cards Container -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {% for service in services %}
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden relative">
+                    <div class="absolute top-4 left-4 bg-yellow-400 text-white font-semibold text-sm px-3 py-1 rounded-lg shadow-md">
+                        Date: {{ service.date|date:"F j, Y" }}
+                    </div>
+                    <img src="{{ service.image.url }}" alt="{{ service.title }}" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-[#205A28] mb-4">{{ service.title }}</h3>
+                        <p class="text-gray-700 mb-4">{{ service.description }}</p>
+                        <ul class="space-y-2 text-gray-700 mb-4">
+                            <li><strong>Duration:</strong> {{ service.duration }}</li>
+                            <li><strong>Mode of Service:</strong> {{ service.mode_of_service }}</li>
+                            <li><strong>Session Date:</strong> {{ service.date|date:"F j, Y" }}</li>
+                        </ul>
+                        <button class="bg-button text-white py-2 px-4 rounded-lg bg-button-hover transition-all" onclick="openServiceModal('{{ service.id }}')">Book Now</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+  
+
+  <!-- Service Details Modal (Hidden Initially) -->
+  <div id="serviceModal" class="fixed inset-0 modal-bg flex justify-center items-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+      <h3 id="modalServiceTitle" class="text-2xl font-bold text-gray-900 mb-4">Service Details</h3>
+      <p id="modalServiceDescription" class="text-gray-700 mb-4">Description of the service...</p>
+      <ul id="modalServiceDetails" class="space-y-2 text-gray-700 mb-4">
+        <li><strong>Duration:</strong> 60 mins</li>
+        <li><strong>Mode of Service:</strong> Online / Offline</li>
+      </ul>
+      <!-- Buttons Section -->
+      <div class="flex justify-between">
+        <button onclick="closeModal()" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-400 transition-all">
+          Close
+        </button>
+        <button onclick="registerForService()" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 transition-all">
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Footer -->
+  <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Upper Section: Quick Links and About -->
+      <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+        <!-- About Us -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+          <ul class="space-y-2">
+            <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+            <li><strong>CEO:</strong> Shivani Arora</li>
+            <li><strong>Support:</strong> Shveta Arora</li>
+            <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+          </ul>
+        </div>
+  
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">About</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Services</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Contact</a></li>
+          </ul>
+        </div>
+  
+        <!-- Services Offered -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+          <ul class="space-y-2">
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">yoga</a></li>
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">meru</a></li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Middle Section: Social Media and Map -->
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+        <!-- Social Media Links -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-facebook fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>
+          </div>
+        </div>
+  
+        <!-- Map View -->
+        <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+          <iframe 
+            class="w-full h-full"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin" 
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+  
+      <!-- Bottom Section -->
+      <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+        <p>&copy; 2024 Heal. All rights reserved.</p><p>Waiting for copyright</p>
+      </div>
+    </div>
+  </footer>
+  
+
+  <script>
+    // Open modal function
+    const menuToggle = document.getElementById('menu-toggle');
+    const dropdown = document.getElementById('dropdown');
+    function openServiceModal(service) {
+      let modal = document.getElementById('serviceModal');
+      let serviceTitle = document.getElementById('modalServiceTitle');
+      let serviceDescription = document.getElementById('modalServiceDescription');
+      let serviceDetails = document.getElementById('modalServiceDetails');
+
+      if (service == '1') {
+        serviceTitle.innerText = 'Bacth Flower Remedies';
+        serviceDescription.innerText = 'A holistic healing therapy using flower essences to restore emotional balance.';
+        serviceDetails.innerHTML = `
+          <li><strong>Duration:</strong> 60 mins</li>
+          <li><strong>Mode of Service:</strong> Online / Offline</li>
+        `;
+      } else if (service == '2') {
+        serviceTitle.innerText = 'Face Lift & Body Processes';
+        serviceDescription.innerText = 'Access Bars Face Lift & Body Processes help rejuvenate your face and body.';
+        serviceDetails.innerHTML = `
+          <li><strong>Duration:</strong> 90 mins</li>
+          <li><strong>Mode of Service:</strong> Offline</li>
+        `;
+      } else if (service == '3') {
+        serviceTitle.innerText = 'Craniosacral Therapy (CST)';
+        serviceDescription.innerText = 'A gentle, hands-on method of evaluating and enhancing the functioning of the body’s craniosacral system.';
+        serviceDetails.innerHTML = `
+          <li><strong>Duration:</strong> 60 mins</li>
+          <li><strong>Mode of Service:</strong> Online / Offline</li>
+        `;
+      } else if (service == '4') {
+        serviceTitle.innerText = 'Meru Therapy';
+        serviceDescription.innerText = 'A unique healing technique focusing on spinal alignment and overall wellness through gentle adjustments.';
+        serviceDetails.innerHTML = `
+          <li><strong>Duration:</strong> 60 mins</li>
+          <li><strong>Mode of Service:</strong> Online / Offline</li>
+        `;
+      } else if (service == '5') {
+        serviceTitle.innerText = 'Yoga Therapy';
+        serviceDescription.innerText = 'An ancient practice combining physical postures, breathing techniques, and meditation to promote health and well-being.';
+        serviceDetails.innerHTML = `
+          <li><strong>Duration:</strong> 60 mins</li>
+          <li><strong>Mode of Service:</strong> Online / Offline</li>
+        `;
+      }
+    
+
+      modal.classList.remove('hidden');
+    }
+
+    // Close modal function
+    function closeModal() {
+      let modal = document.getElementById('serviceModal');
+      modal.classList.add('hidden');
+    }
+
+    function registerForService() {
+      alert("You have registered successfully!"); // Replace this with your registration logic
+      closeModal(); // Close the modal after registration
+    }
+    
+
+    menuToggle.addEventListener('click', () => {
+      dropdown.classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+
+</html>

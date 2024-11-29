@@ -1,0 +1,521 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heal-home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Default: Full-screen height for larger screens */
+    .slide {
+      height: 100vh;
+      /* 100% of the viewport height */
+    }
+
+    /* For smaller screens: Adjust to 3/4 of the viewport height */
+    @media (max-width: 768px) {
+      .slide {
+        height: 75vh;
+        /* 75% of the viewport height */
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white overflow-x-hidden">
+  <!-- Navbar -->
+  <nav class="bg-gray-800 bg-opacity-90 fixed top-0 w-full z-10 shadow-lg">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div class="text-2xl font-bold text-white hover:text-gray-300 transition duration-300">
+        <a href="#">Heal</a>
+      </div>
+      <ul class="hidden md:flex space-x-8 text-lg">
+        <li><a href="#slider" class="hover:text-gray-300 transition duration-300">Home</a></li>
+        <li><a href="#about" class="hover:text-gray-300 transition duration-300">About Us</a></li>
+        <li><a href="#contact" class="hover:text-gray-300 transition duration-300">Contact Us</a></li>
+        <li><a href="#services" class="hover:text-gray-300 transition duration-300">Services</a></li>
+        <li><p font-bold text-white>+918888888888</p></li>
+        
+      </ul>
+      <div class="md:hidden flex items-center">
+        <button id="menuToggle" class="text-white focus:outline-none" aria-label="Toggle Menu">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-800 text-center">
+      <ul class="space-y-4 py-4">
+        <li><a href="#slider" class="hover:text-gray-300 transition duration-300">Home</a></li>
+        <li><a href="#about" class="hover:text-gray-300 transition duration-300">About Us</a></li>
+        <li><a href="#contact" class="hover:text-gray-300 transition duration-300">Contact Us</a></li>
+        <li><a href="#services" class="hover:text-gray-300 transition duration-300">Services</a></li>
+
+        
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div id="slider" class="relative w-full pt-16">
+    <!-- Slider Content -->
+    <div class="slides flex h-full transition-transform duration-700">
+      <!-- Slide 1 -->
+      <div class="slide relative w-full flex-shrink-0 bg-cover bg-center"
+        style="background-image: url('{% static 'image/yoga1.jpeg' %}');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center">
+          <h1 class="text-4xl font-bold">Heal Your Body, Mind, and Soul.</h1>
+          <p class="mt-4 text-lg">Discover the transformative power of holistic healing therapies.</p>
+        </div>
+      </div>
+      <!-- Slide 2 -->
+      <div class="slide relative w-full flex-shrink-0 bg-cover bg-center"
+        style="background-image: url('{% static 'image/yoga4.png' %}');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center">
+          <h1 class="text-4xl font-bold">Your Journey to Wellness Starts Here.</h1>
+          <p class="mt-4 text-lg">Rejuvenate with Craniosacral Therapy, Bach Flower Remedies, and Access Bar techniques.</p>
+        </div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="slide relative w-full flex-shrink-0 bg-cover bg-center"
+        style="background-image: url('{% static 'image/yoga3.jpeg' %}');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center">
+          <h1 class="text-4xl font-bold">Restore and Rebalance Your Body</h1>
+          <p class="mt-4 text-lg">Enhance beauty and confidence with non-invasive methods.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Navigation and Progress Bars -->
+    <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-3xl" role="button"
+      aria-label="Previous Slide">&#8249;</button>
+    <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-3xl" role="button"
+      aria-label="Next Slide">&#8250;</button>
+    <div class="absolute bottom-4 left-0 w-full flex justify-center space-x-4">
+      <div class="progress-bar h-2 flex-1 bg-gray-600"></div>
+      <div class="progress-bar h-2 flex-1 bg-gray-600"></div>
+      <div class="progress-bar h-2 flex-1 bg-gray-600"></div>
+    </div>
+  </div>
+
+  <!-- About Us Section -->
+<section id="about" class="bg-gray-800 py-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+    <!-- Text Content -->
+    <div class="md:w-1/2 mb-8 md:mb-0">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">About Us</h2>
+      <p class="text-lg leading-relaxed text-gray-300">
+        <span class="font-bold text-white">We</span> are a holistic healer, who are passionate about personal development and the divinatory 
+        arts. What do I do? I combine the world of my knowledge with the world of personal 
+        development and Wellness for our clients.</p><br>
+        <p class="text-lg leading-relaxed text-gray-300">we help you think more deeply about things so you can build a more coherent project for 
+        your life. we listen to your deepest desires and help you take the distance you need from 
+        your daily life to talk about your future.</p><br>
+        <p class="text-lg leading-relaxed text-gray-300">We help you look at your future from a different viewpoint. 
+        As a Therapist (CST Practitioner) , Face Lift , Body Processes, Access Bar Practitioner and 
+        Light worker, I am there to support you every day in your professional life, to help you have 
+        a truly fulfilling career. I also help you in your personal life. Together we can think about 
+        decisions you need to take so that your daily life becomes more satisfying and smoother.
+      </p>
+    </div>
+    <!-- Image Content -->
+    <div class="md:w-1/2">
+      <img src="{% static 'image/about us image.png' %}" alt="About NeoLearn" class="rounded-bl-5xl">
+    </div>
+  </div>
+</section>
+
+<!-- CST Section -->
+<section id="cst" class="bg-gray-900 py-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center">
+      <!-- Text Content -->
+      <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">What is CST?</h2>
+        <p class="text-lg leading-relaxed text-gray-300">
+          Craniosacral Therapy (CST) is a gentle, non-invasive hands-on therapy that focuses on the 
+          craniosacral system, which includes the membranes and cerebrospinal fluid that surround 
+          the brain and spinal cord. CST helps release tension, improve bodily function, and promote 
+          natural healing by facilitating the body's own healing processes. It is widely used to 
+          address stress, chronic pain, and various physical and emotional conditions.
+        </p>
+      </div>
+      <!-- Image Gallery -->
+      <div class="md:w-1/2 grid grid-cols-2 gap-4">
+        <div class="aspect-w-4 aspect-h-3">
+          <img src="{% static 'image/cst1.png' %}" alt="CST Therapy Image 1" class="rounded-lg shadow-lg object-cover w-full h-full">
+        </div>
+        <div class="aspect-w-4 aspect-h-3">
+          <img src="{% static 'image/cst2.jpeg' %}" alt="CST Therapy Image 2" class="rounded-lg shadow-lg object-cover w-full h-full">
+        </div>
+        <div class="aspect-w-4 aspect-h-3">
+          <img src="{% static 'image/cst3.jpg' %}" alt="CST Therapy Image 3" class="rounded-lg shadow-lg object-cover w-full h-full">
+        </div>
+        <div class="aspect-w-4 aspect-h-3">
+          <img src="{% static 'image/cstt4.webp' %}" alt="CST Therapy Image 4" class="rounded-lg shadow-lg object-cover w-full h-full">
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section id="benefits" class="py-16 bg-gradient-to-r from-blue-50 via-white to-blue-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-10">Benefits of Craniosacral Therapy</h2>
+    <div class="space-y-8">
+      <!-- Benefit Item -->
+      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(1)">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-500">1. Reduces Chronic Lower Back Pain</h3>
+          <span id="icon-1" class="text-2xl text-blue-500 transform transition-transform">+</span>
+        </button>
+        <div id="content-1" class="mt-4 hidden text-gray-700">
+          CST relieves lower back pain by enhancing circulation, releasing tension, and supporting the body’s natural healing processes.
+        </div>
+      </div>
+
+      <!-- Benefit 2 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(2)">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-500">2. Stress and Anxiety Relief</h3>
+          <span id="icon-2" class="text-2xl text-blue-500 transform transition-transform">+</span>
+        </button>
+        <div id="content-2" class="mt-4 hidden text-gray-700">
+          CST helps calm the nervous system, promoting deep relaxation and reducing the impact of stress and anxiety.
+        </div>
+      </div>
+
+      <!-- Benefit 3 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(3)">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-500">3. Improved Sleep Quality</h3>
+          <span id="icon-3" class="text-2xl text-blue-500 transform transition-transform">+</span>
+        </button>
+        <div id="content-3" class="mt-4 hidden text-gray-700">
+          By easing physical and emotional tension, CST improves sleep patterns, reducing insomnia and promoting restful nights.
+        </div>
+      </div>
+
+      <!-- Benefit 4 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(4)">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-500">4. Relief from Headaches and Migraines</h3>
+          <span id="icon-4" class="text-2xl text-blue-500 transform transition-transform">+</span>
+        </button>
+        <div id="content-4" class="mt-4 hidden text-gray-700">
+          CST alleviates headaches and migraines by gently releasing tension in the head, neck, and spine.
+        </div>
+      </div>
+
+      <!-- Benefit 5 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(5)">
+          <h3 class="text-xl font-semibold text-gray-900 group-hover:text-blue-500">5. Post-Delivery Recovery Support</h3>
+          <span id="icon-5" class="text-2xl text-blue-500 transform transition-transform">+</span>
+        </button>
+        <div id="content-5" class="mt-4 hidden text-gray-700">
+          CST supports mothers by aiding in recovery post-delivery, reducing pain, and promoting emotional well-being.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="cst-gallery" class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-10">CST Results Gallery</h2>
+    <p class="text-center text-lg text-gray-600 mb-12">
+      Explore real results achieved through Craniosacral Therapy in these inspiring videos.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Video Item 1 -->
+      <div class="relative group">
+        <video 
+          class="rounded-lg shadow-lg w-full cursor-pointer group-hover:opacity-90" 
+          controls 
+          poster="{% static 'image/yoga1.jpeg' %}">
+          <source src="{% static 'videos/cstv1.mp4' %}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p class="mt-4 text-center text-gray-700 font-medium">Session Outcome: Lower Back Pain Relief.</p>
+      </div>
+
+      <!-- Video Item 2 -->
+      <div class="relative group">
+        <video 
+          class="rounded-lg shadow-lg w-full cursor-pointer group-hover:opacity-90" 
+          controls 
+          poster="{% static 'image/yoga2.jpeg' %}">
+          <source src="{% static 'videos/cstv2.mp4' %}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p class="mt-4 text-center text-gray-700 font-medium">Session Outcome: Improved anger and frustation issues.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Contact Section -->
+<section id="contact" class="bg-gray-900 py-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Heading -->
+    <h2 class="text-4xl font-bold text-center text-white mb-8">Contact Us</h2>
+    <p class="text-lg text-center text-gray-300 mb-12">
+      We'd love to hear from you! Please fill out the form below to reach out.
+    </p>
+
+    <!-- Form Wrapper -->
+    <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+      <form action="contact" method="POST" class="space-y-6">
+        {% csrf_token %}
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name" class="block text-lg font-medium text-gray-300 mb-2">Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            placeholder="Enter your name" 
+            required 
+            class="block w-full px-4 py-3 text-gray-900 rounded-md shadow-sm border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="block text-lg font-medium text-gray-300 mb-2">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="Enter your email" 
+            required 
+            class="block w-full px-4 py-3 text-gray-900 rounded-md shadow-sm border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone" class="block text-lg font-medium text-gray-300 mb-2">Phone</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="mobile_number" 
+            placeholder="Enter your phone number" 
+            required 
+            class="block w-full px-4 py-3 text-gray-900 rounded-md shadow-sm border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Subject -->
+        <div class="form-group">
+          <label for="subject" class="block text-lg font-medium text-gray-300 mb-2">Subject</label>
+          <input 
+            type="text" 
+            id="subject" 
+            name="subject" 
+            placeholder="Enter the subject" 
+            required 
+            class="block w-full px-4 py-3 text-gray-900 rounded-md shadow-sm border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Message -->
+        <div class="form-group">
+          <label for="message" class="block text-lg font-medium text-gray-300 mb-2">Message</label>
+          <textarea 
+            id="message" 
+            name="message" 
+            rows="5" 
+            placeholder="Write your message here..." 
+            required 
+            class="block w-full px-4 py-3 text-gray-900 rounded-md shadow-sm border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button 
+            type="submit" 
+            class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Send Message
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<!-- Footer Section -->
+<footer class="bg-gray-800 py-12 text-gray-300">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Upper Section: Quick Links and About -->
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+      <!-- About Us -->
+      <div>
+        <h3 class="text-2xl font-bold text-white mb-4">About Us</h3>
+        <ul class="space-y-2">
+          <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+          <li><strong>CEO:</strong> Shivani Arora</li>
+          <li><strong>Support:</strong> Shveta Arora</li>
+          <li><strong>Location:</strong> Zirakpur</li>
+        </ul>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-2xl font-bold text-white mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#home" class="hover:text-blue-400">Home</a></li>
+          <li><a href="#about" class="hover:text-blue-400">About</a></li>
+          <li><a href="#services" class="hover:text-blue-400">Services</a></li>
+          <li><a href="#contact" class="hover:text-blue-400">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Services Offered -->
+      <div>
+        <h3 class="text-2xl font-bold text-white mb-4">Our Services</h3>
+        <ul class="space-y-2">
+          <li><a href="#cst" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+          <li><a href="#bach" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+          <li><a href="#access-bar" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Middle Section: Social Media and Map -->
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+      <!-- Social Media Links -->
+      <div>
+        <h3 class="text-2xl font-bold text-white mb-4">Follow Us</h3>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-300 hover:text-blue-400"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="#" class="text-gray-300 hover:text-blue-400"><i class="fab fa-instagram fa-lg"></i></a>
+          <a href="#" class="text-gray-300 hover:text-blue-400"><i class="fab fa-twitter fa-lg"></i></a>
+          <a href="#" class="text-gray-300 hover:text-blue-400"><i class="fab fa-linkedin fa-lg"></i></a>
+        </div>
+      </div>
+
+      <!-- Map View -->
+      <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+        <iframe 
+          class="w-full h-full"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin" 
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-12 border-t border-gray-700 pt-6 text-center text-gray-400">
+      <p>&copy; 2024 Heal. All rights reserved.</p><p>    waiting for copyright</p>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    const slides = document.querySelector(".slides");
+    const progressBars = document.querySelectorAll(".progress-bar");
+    const totalSlides = document.querySelectorAll(".slides > div").length;
+    let currentIndex = 0;
+    let interval;
+
+
+
+    
+    function toggleBenefit(id) {
+      const content = document.getElementById(`content-${id}`);
+      const icon = document.getElementById(`icon-${id}`);
+      content.classList.toggle('hidden');
+      icon.textContent = content.classList.contains('hidden') ? '+' : '-';
+    }
+
+
+    function updateSlider(index) {
+      slides.style.transform = `translateX(-${index * 100}%)`;
+      progressBars.forEach((bar, i) => {
+        bar.classList.toggle("bg-white", i === index);
+        bar.classList.toggle("bg-gray-600", i !== index);
+      });
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateSlider(currentIndex);
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      updateSlider(currentIndex);
+    }
+
+    function startAutoSlide() {
+      interval = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(interval);
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      stopAutoSlide();
+      nextSlide();
+      startAutoSlide();
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      stopAutoSlide();
+      prevSlide();
+      startAutoSlide();
+    });
+
+    slides.addEventListener("touchstart", (e) => {
+      const startX = e.touches[0].clientX;
+      slides.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX;
+        if (Math.abs(endX - startX) > 50) {
+          stopAutoSlide();
+          if (endX < startX) nextSlide();
+          else prevSlide();
+          startAutoSlide();
+        }
+      }, { once: true });
+    });
+
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    });
+
+    updateSlider(currentIndex);
+    startAutoSlide();
+  </script>
+</body>
+
+</html>

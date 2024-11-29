@@ -126,6 +126,11 @@ STATICFILES_DIRS = [
 # The directory where collectstatic will collect static files for deployment
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Add media settings to handle images
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
