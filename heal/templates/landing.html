@@ -8,13 +8,38 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
     h1, h2 {
       font-family: 'Playfair Display', serif;
+    }.whatsapp-button {
+      position: fixed;
+      bottom: 20px; /* Adjust for desired vertical placement */
+      right: 20px; /* Adjust for desired horizontal placement */
+      background-color: #25D366; /* WhatsApp green */
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      cursor: pointer;
     }
+
+    .whatsapp-button img {
+      width: 35px; /* Adjust icon size */
+      height: 35px;
+    }
+
+    .whatsapp-button:hover {
+      background-color: #1EBE5B; /* Slightly darker green on hover */
+    }
+    
   </style>
 </head>
 <body class="bg-[#F4F4F4] text-[#2E8B57]">
@@ -601,7 +626,15 @@
   </div>
 </section>
 
-
+<a 
+    href="https://wa.me/+917004349469?text=Hello! I have an enquiry for..." 
+    target="_blank" 
+    class="whatsapp-button" 
+    title="Chat with us on WhatsApp">
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+      alt="WhatsApp Logo">
+  </a>
 
 <!-- Footer Section -->
 <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
