@@ -1,25 +1,35 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KM healing foundation-home</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{% static 'js/tailwind.js' %}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="{% static 'css/cloudfare.css' %}"
+    rel="stylesheet">
 
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
-    h1, h2 {
+
+    h1,
+    h2 {
       font-family: 'Playfair Display', serif;
-    }.whatsapp-button {
+    }
+
+    .whatsapp-button {
       position: fixed;
-      bottom: 20px; /* Adjust for desired vertical placement */
-      right: 20px; /* Adjust for desired horizontal placement */
-      background-color: #25D366; /* WhatsApp green */
+      bottom: 20px;
+      /* Adjust for desired vertical placement */
+      right: 20px;
+      /* Adjust for desired horizontal placement */
+      background-color: #25D366;
+      /* WhatsApp green */
       border-radius: 50%;
       width: 60px;
       height: 60px;
@@ -32,16 +42,25 @@
     }
 
     .whatsapp-button img {
-      width: 35px; /* Adjust icon size */
+      width: 35px;
+      /* Adjust icon size */
       height: 35px;
     }
 
     .whatsapp-button:hover {
-      background-color: #1EBE5B; /* Slightly darker green on hover */
+      background-color: #1EBE5B;
+      /* Slightly darker green on hover */
     }
-    
+
+    .text-gold {
+      color: #FFD700; /* Gold color */
+    }
+    .border-gold {
+      border-color: #FFD700; /* Gold border */
+    }
   </style>
 </head>
+
 <body class="bg-[#F4F4F4] text-[#2E8B57]">
 
   <!-- Navbar -->
@@ -49,36 +68,85 @@
     <div class="container mx-auto flex items-center justify-between p-4">
       <!-- Logo and Title -->
       <div class="flex items-center space-x-3">
-        <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full">
-        <h1 class="text-3xl font-bold tracking-wide">KM Healing Foundation</h1>
+        <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full border-2 border-gold">
+        <h1 class="text-3xl font-bold tracking-wide text-gold ">KM Healing Foundation</h1>
       </div>
       <!-- Hamburger Button -->
       <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
         ☰
       </button>
       <!-- Menu -->
-      <ul id="menu" class="hidden md:flex space-x-6 text-lg font-semibold">
-        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
-        <li><a href="#about" class="hover:underline">About Us</a></li>
-        <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
-        <li><a href="#contact" class="hover:underline">Contact</a></li>
-      </ul>
+      <div class="hidden md:flex items-center space-x-6">
+        <ul class="flex space-x-6 text-lg font-semibold">
+          <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+          <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
+          <li><a href="{% url 'contact' %}" class="hover:underline">Contact</a></li>
+        </ul>
+        <!-- Login and Sign Up Buttons -->
+        <div class="flex space-x-4">
+          {% if user.is_authenticated %}
+          {% if request.user.is_staff %}
+          <a href="{% url 'admin_dashboard' %}"
+            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+            Profile
+          </a>
+            {% else %}
+            <a href="{% url 'profile' %}"
+            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+            Profile
+          </a>
+            {% endif %}
+          <a href="{% url 'logout' %}"
+            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+            Logout
+          </a>
+
+          {% else %}
+          <a href="{% url 'login' %}"
+            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+            Login
+          </a>
+          <a href="{% url 'register' %}"
+            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+            Signup
+          </a>
+
+          {% endif %}
+
+        </div>
+      </div>
     </div>
     <!-- Dropdown for Small Screens -->
     <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
       <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
-      <li><a href="#about" class="hover:underline block">About Us</a></li>
       <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
-      <li><a href="#contact" class="hover:underline block">Contact</a></li>
+      <li><a href="{% url 'contact' %}" class="hover:underline block">Contact</a></li>
+      {% if user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}" class="hover:underline block">profile</a>
+            {% else %}
+            <li><a href="{% url 'profile' %}" class="hover:underline block">Profile</a></li>
+            {% endif %}
+      
+      <li><a href="{% url 'logout' %}" class="hover:underline block">Logout</a></li>
+      
+      {% else %}
+      <li><a href="{% url 'login' %}" class="hover:underline block">Login</a></li>
+      <li><a href="{% url 'register' %}" class="hover:underline block">Signup</a></li>
+      
+
+      {% endif %}
     </ul>
   </nav>
+
 
   <!-- Slider -->
   <div class="relative overflow-hidden mt-4 mx-4 rounded-lg">
     <div id="slider" class="flex transition-transform duration-700 ease-in-out">
       <!-- Slide 1 -->
       <div class="min-w-full h-[75vh] md:h-[80vh] bg-[#EAF8F0] flex items-center justify-center relative rounded-lg">
-        <img src="{% static 'image/yog1.jpeg' %}" alt="Slide 1" class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
+        <img src="{% static 'image/yog1.jpeg' %}" alt="Slide 1"
+          class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
         <div class="text-center bg-black bg-opacity-40 p-6 rounded-lg shadow-lg z-10">
           <h2 class="text-4xl md:text-6xl font-bold text-white">Discover Your Inner Peace</h2>
           <p class="mt-4 text-lg md:text-2xl text-gray-300">Healing therapies for mind, body, and soul.</p>
@@ -86,7 +154,8 @@
       </div>
       <!-- Slide 2 -->
       <div class="min-w-full h-[75vh] md:h-[80vh] bg-[#DDEBE4] flex items-center justify-center relative rounded-lg">
-        <img src="{% static 'image/yoga2.jpeg' %}" alt="Slide 2" class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
+        <img src="{% static 'image/yoga2.jpeg' %}" alt="Slide 2"
+          class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
         <div class="text-center bg-black bg-opacity-40 p-6 rounded-lg shadow-lg z-10">
           <h2 class="text-4xl md:text-6xl font-bold text-white">Personalized Healing</h2>
           <p class="mt-4 text-lg md:text-2xl text-gray-300">Tailored therapies for unique individuals.</p>
@@ -94,7 +163,8 @@
       </div>
       <!-- Slide 3 -->
       <div class="min-w-full h-[75vh] md:h-[80vh] bg-[#CBE3D8] flex items-center justify-center relative rounded-lg">
-        <img src="{% static 'image/yoga3.jpeg' %}" alt="Slide 3" class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
+        <img src="{% static 'image/yoga3.jpeg' %}" alt="Slide 3"
+          class="absolute inset-0 w-full h-full object-cover rounded-lg opacity-80">
         <div class="text-center bg-black bg-opacity-40 p-6 rounded-lg shadow-lg z-10">
           <h2 class="text-4xl md:text-6xl font-bold text-white">Natural Therapies</h2>
           <p class="mt-4 text-lg md:text-2xl text-gray-300">Experience the harmony of healing.</p>
@@ -103,8 +173,10 @@
     </div>
 
     <!-- Buttons -->
-    <button id="prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#2E8B57] text-white p-3 rounded-full hover:bg-[#236942]">❮</button>
-    <button id="next" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#2E8B57] text-white p-3 rounded-full hover:bg-[#236942]">❯</button>
+    <button id="prev"
+      class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#2E8B57] text-white p-3 rounded-full hover:bg-[#236942]">❮</button>
+    <button id="next"
+      class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#2E8B57] text-white p-3 rounded-full hover:bg-[#236942]">❯</button>
 
     <!-- Slide Indicators -->
     <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
@@ -120,22 +192,25 @@
       <div class="md:w-1/2 mb-8 md:mb-0">
         <h2 class="text-3xl md:text-4xl font-bold text-[#2E8B57] mb-6">About Us</h2>
         <p class="text-lg leading-relaxed text-gray-700">
-          <span class="font-bold text-[#205A28]">We</span> are holistic healers who are passionate about personal development and the divinatory 
-          arts. What do we do? We combine the world of our knowledge with the world of personal 
+          <span class="font-bold text-[#205A28]">We</span> are holistic healers who are passionate about personal
+          development and the divinatory
+          arts. What do we do? We combine the world of our knowledge with the world of personal
           development and wellness for our clients.
         </p>
         <br>
         <p class="text-lg leading-relaxed text-gray-700">
-          <span class="font-bold text-[#205A28]">We</span> help you think more deeply about things so you can build a more coherent project for 
-          your life. We listen to your deepest desires and help you take the distance you need from 
+          <span class="font-bold text-[#205A28]">We</span> help you think more deeply about things so you can build a
+          more coherent project for
+          your life. We listen to your deepest desires and help you take the distance you need from
           your daily life to talk about your future.
         </p>
         <br>
         <p class="text-lg leading-relaxed text-gray-700">
-          <span class="font-bold text-[#205A28]">We</span> help you look at your future from a different viewpoint. As therapists (CST Practitioners), 
-          Face Lift, Body Processes, Access Bar Practitioners, and Light workers, we are here to support 
-          you every day in your professional life, to help you have a truly fulfilling career. We also help you 
-          in your personal life. Together, we can think about decisions you need to take so that your 
+          <span class="font-bold text-[#205A28]">We</span> help you look at your future from a different viewpoint. As
+          therapists (CST Practitioners),
+          Face Lift, Body Processes, Access Bar Practitioners, and Light workers, we are here to support
+          you every day in your professional life, to help you have a truly fulfilling career. We also help you
+          in your personal life. Together, we can think about decisions you need to take so that your
           daily life becomes more satisfying and smoother.
         </p>
       </div>
@@ -148,7 +223,7 @@
       </div>
     </div>
   </section>
-  
+
 
 
   <section id="cst" class="bg-[#E5F7ED] py-16 rounded-lg shadow-lg mt-12 mx-4">
@@ -158,555 +233,644 @@
         <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
           <h2 class="text-3xl md:text-4xl font-bold text-[#205A28] mb-6">What is CST?</h2>
           <p class="text-lg leading-relaxed text-gray-700 mb-6">
-            <span class="font-bold text-[#205A28]">Craniosacral Therapy</span> (CST) is a gentle, non-invasive hands-on therapy that focuses on the 
-            craniosacral system, which includes the membranes and cerebrospinal fluid that surround 
-            the brain and spinal cord. CST helps release tension, improve bodily function, and promote 
-            natural healing by facilitating the body's own healing processes. It is widely used to 
+            <span class="font-bold text-[#205A28]">Craniosacral Therapy</span> (CST) is a gentle, non-invasive hands-on
+            therapy that focuses on the
+            craniosacral system, which includes the membranes and cerebrospinal fluid that surround
+            the brain and spinal cord. CST helps release tension, improve bodily function, and promote
+            natural healing by facilitating the body's own healing processes. It is widely used to
             address stress, chronic pain, and various physical and emotional conditions.
           </p>
           <!-- Call-to-Action Button -->
           <div class="mt-6">
-            <a href="{% url 'services' %}" class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-300">
+            <a href="{% url 'services' %}"
+              class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-300">
               Book a Session Today
             </a>
           </div>
         </div>
-  
+
         <!-- Image Gallery -->
         <div class="md:w-1/2 grid grid-cols-2 gap-4">
           <div class="aspect-w-4 aspect-h-3">
-            <img src="{% static 'image/cst1.png' %}" alt="CST Therapy Image 1" 
-                 class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
+            <img src="{% static 'image/cst1.png' %}" alt="CST Therapy Image 1"
+              class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
           </div>
           <div class="aspect-w-4 aspect-h-3">
-            <img src="{% static 'image/cst2.jpeg' %}" alt="CST Therapy Image 2" 
-                 class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
+            <img src="{% static 'image/cst2.jpeg' %}" alt="CST Therapy Image 2"
+              class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
           </div>
           <div class="aspect-w-4 aspect-h-3">
-            <img src="{% static 'image/cst3.jpg' %}" alt="CST Therapy Image 3" 
-                 class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
+            <img src="{% static 'image/cstn.jpg' %}" alt="CST Therapy Image 3"
+              class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
           </div>
           <div class="aspect-w-4 aspect-h-3">
-            <img src="{% static 'image/cstt4.webp' %}" alt="CST Therapy Image 4" 
-                 class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
+            <img src="{% static 'image/cst4.jpg' %}" alt="CST Therapy Image 4"
+              class="rounded-lg shadow-lg object-cover w-full h-full transform transition duration-300 hover:scale-105">
           </div>
         </div>
       </div>
     </div>
   </section>
-  
 
 
 
-<section id="benefits" class="py-16 bg-[#DFF5E9] rounded-lg shadow-lg mt-12 mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-10">Benefits of Craniosacral Therapy</h2>
-    <div class="space-y-8">
-      <!-- Benefit Item -->
-      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
-        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(1)">
-          <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">1. Reduces Chronic Lower Back Pain</h3>
-          <span id="icon-1" class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
-        </button>
-        <div id="content-1" class="mt-4 hidden text-gray-700">
-          CST relieves lower back pain by enhancing circulation, releasing tension, and supporting the body’s natural healing processes.
+
+  <section id="benefits" class="py-16 bg-[#DFF5E9] rounded-lg shadow-lg mt-12 mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-10">Benefits of Craniosacral Therapy</h2>
+      <div class="space-y-8">
+        <!-- Benefit Item -->
+        <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
+          <button class="flex justify-between items-center w-full text-left focus:outline-none group"
+            onclick="toggleBenefit(1)">
+            <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">1.
+              Reduces Chronic Lower Back Pain</h3>
+            <span id="icon-1"
+              class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
+          </button>
+          <div id="content-1" class="mt-4 hidden text-gray-700">
+            CST relieves lower back pain by enhancing circulation, releasing tension, and supporting the body’s natural
+            healing processes.
+          </div>
         </div>
-      </div>
 
-      <!-- Benefit 2 -->
-      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
-        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(2)">
-          <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">2. Stress and Anxiety Relief</h3>
-          <span id="icon-2" class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
-        </button>
-        <div id="content-2" class="mt-4 hidden text-gray-700">
-          CST helps calm the nervous system, promoting deep relaxation and reducing the impact of stress and anxiety.
+        <!-- Benefit 2 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
+          <button class="flex justify-between items-center w-full text-left focus:outline-none group"
+            onclick="toggleBenefit(2)">
+            <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">2.
+              Stress and Anxiety Relief</h3>
+            <span id="icon-2"
+              class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
+          </button>
+          <div id="content-2" class="mt-4 hidden text-gray-700">
+            CST helps calm the nervous system, promoting deep relaxation and reducing the impact of stress and anxiety.
+          </div>
         </div>
-      </div>
 
-      <!-- Benefit 3 -->
-      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
-        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(3)">
-          <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">3. Improved Sleep Quality</h3>
-          <span id="icon-3" class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
-        </button>
-        <div id="content-3" class="mt-4 hidden text-gray-700">
-          By easing physical and emotional tension, CST improves sleep patterns, reducing insomnia and promoting restful nights.
+        <!-- Benefit 3 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
+          <button class="flex justify-between items-center w-full text-left focus:outline-none group"
+            onclick="toggleBenefit(3)">
+            <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">3.
+              Improved Sleep Quality</h3>
+            <span id="icon-3"
+              class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
+          </button>
+          <div id="content-3" class="mt-4 hidden text-gray-700">
+            By easing physical and emotional tension, CST improves sleep patterns, reducing insomnia and promoting
+            restful nights.
+          </div>
         </div>
-      </div>
 
-      <!-- Benefit 4 -->
-      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
-        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(4)">
-          <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">4. Relief from Headaches and Migraines</h3>
-          <span id="icon-4" class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
-        </button>
-        <div id="content-4" class="mt-4 hidden text-gray-700">
-          CST alleviates headaches and migraines by gently releasing tension in the head, neck, and spine.
+        <!-- Benefit 4 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
+          <button class="flex justify-between items-center w-full text-left focus:outline-none group"
+            onclick="toggleBenefit(4)">
+            <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">4.
+              Relief from Headaches and Migraines</h3>
+            <span id="icon-4"
+              class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
+          </button>
+          <div id="content-4" class="mt-4 hidden text-gray-700">
+            CST alleviates headaches and migraines by gently releasing tension in the head, neck, and spine.
+          </div>
         </div>
-      </div>
 
-      <!-- Benefit 5 -->
-      <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
-        <button class="flex justify-between items-center w-full text-left focus:outline-none group" onclick="toggleBenefit(5)">
-          <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">5. Post-Delivery Recovery Support</h3>
-          <span id="icon-5" class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
-        </button>
-        <div id="content-5" class="mt-4 hidden text-gray-700">
-          CST supports mothers by aiding in recovery post-delivery, reducing pain, and promoting emotional well-being.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section id="cst-gallery" class="py-16 bg-[#EDF9F2] rounded-lg shadow-lg mt-12 mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-10">CST Results Gallery</h2>
-    <p class="text-center text-lg text-gray-600 mb-12">
-      Explore real results achieved through Craniosacral Therapy in these inspiring videos.
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Video Item 1 -->
-      <div class="relative group">
-        <video 
-          class="rounded-xl shadow-xl border-2 border-[#1B8366] w-full cursor-pointer group-hover:opacity-90 transition duration-300" 
-          controls 
-          poster="{% static 'image/yoga1.jpeg' %}">
-          <source src="{% static 'videos/cstv1.mp4' %}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <p class="mt-4 text-center text-[#205A28] font-medium">Session Outcome: Lower Back Pain Relief</p>
-      </div>
-
-      <!-- Video Item 2 -->
-      <div class="relative group">
-        <video 
-          class="rounded-xl shadow-xl border-2 border-[#1B8366] w-full cursor-pointer group-hover:opacity-90 transition duration-300" 
-          controls 
-          poster="{% static 'image/yoga2.jpeg' %}">
-          <source src="{% static 'videos/cstv2.mp4' %}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <p class="mt-4 text-center text-[#205A28] font-medium">Session Outcome: Improved Anger and Frustration Issues</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- batch flower -->
-<section id="batch" class="bg-[#EAF9F3] py-16 mt-12 rounded-lg shadow-lg mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Heading -->
-    <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
-      Batch Flower Remedies
-    </h2>
-    <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
-      <span class="font-bold text-[#205A28]">Harness</span> the gentle healing power of flowers to bring harmony and balance to your emotions.
-    </p>
-
-    <!-- Image Gallery -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/bfl1.jpg' %}" alt="Emotional Healing" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Emotional Healing</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/bfl2.jpg' %}" alt="Stress Relief" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/bfl3.jpg' %}" alt="Natural Balance" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Natural Balance</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/bffl4.jpg' %}" alt="Holistic Healing" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Holistic Healing</p>
+        <!-- Benefit 5 -->
+        <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-[#1B8366]">
+          <button class="flex justify-between items-center w-full text-left focus:outline-none group"
+            onclick="toggleBenefit(5)">
+            <h3 class="text-xl font-semibold text-[#205A28] group-hover:text-[#1B8366] transition duration-300">5.
+              Post-Delivery Recovery Support</h3>
+            <span id="icon-5"
+              class="text-2xl text-[#1B8366] transform transition-transform group-hover:rotate-45">+</span>
+          </button>
+          <div id="content-5" class="mt-4 hidden text-gray-700">
+            CST supports mothers by aiding in recovery post-delivery, reducing pain, and promoting emotional well-being.
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Call to Action -->
-    <div class="mt-12 text-center">
-      <p class="text-xl text-gray-800 font-medium mb-6">
-        Ready to embrace the gentle yet powerful touch of nature?
+
+  <section id="cst-gallery" class="py-16 bg-[#EDF9F2] rounded-lg shadow-lg mt-12 mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-10">CST Results Gallery</h2>
+      <p class="text-center text-lg text-gray-600 mb-12">
+        Explore real results achieved through Craniosacral Therapy in these inspiring videos.
       </p>
-      <a href="{% url 'services' %}" class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
-        Book Your Session Today
-      </a>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- Face Lift & Body Processes (Access Bars) Section -->
-<section id="access-bar" class="bg-[#EAF9F3] py-16 mt-12 rounded-lg shadow-lg mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Heading -->
-    <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
-      Face Lift & Body Processes
-    </h2>
-    <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
-      <span class="font-bold text-[#205A28]">Unlock</span> a natural glow and rejuvenate your mind and body through Access Bars and Face Lift Body Processes. Experience deep relaxation, reduced stress, and enhanced overall well-being.
-    </p>
-
-    <!-- Image Gallery -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/fl4.jpg' %}" alt="Rejuvenating Session" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Rejuvenating Session</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Video Item 1 -->
+        <div class="relative group">
+          <video
+            class="rounded-xl shadow-xl border-2 border-[#1B8366] w-full cursor-pointer group-hover:opacity-90 transition duration-300"
+            controls poster="{% static 'image/yoga1.jpeg' %}">
+            <source src="{% static 'videos/cstv1.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p class="mt-4 text-center text-[#205A28] font-medium">Session Outcome: Lower Back Pain Relief</p>
         </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/fl2.jpg' %}" alt="Stress Relief Therapy" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief Therapy</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/fl3.jpg' %}" alt="Mind & Body Balance" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Mind & Body Balance</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/fl4.jpg' %}" alt="Natural Glow Enhancement" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Natural Glow Enhancement</p>
+
+        <!-- Video Item 2 -->
+        <div class="relative group">
+          <video
+            class="rounded-xl shadow-xl border-2 border-[#1B8366] w-full cursor-pointer group-hover:opacity-90 transition duration-300"
+            controls poster="{% static 'image/yoga2.jpeg' %}">
+            <source src="{% static 'videos/cstv2.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <p class="mt-4 text-center text-[#205A28] font-medium">Session Outcome: Improved Anger and Frustration Issues
+          </p>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Call to Action -->
-    <div class="mt-12 text-center">
-      <p class="text-xl text-gray-800 font-medium mb-6">
-        Ready to feel rejuvenated and stress-free?
+
+  <!-- batch flower -->
+  <section id="batch" class="bg-[#EAF9F3] py-16 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Heading -->
+      <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
+        Batch Flower Remedies
+      </h2>
+      <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
+        <span class="font-bold text-[#205A28]">Harness</span> the gentle healing power of flowers to bring harmony and
+        balance to your emotions.
       </p>
-      <a href="{% url 'services' %}" class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
-        Book Your Session Today
-      </a>
+
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/bfl1.jpg' %}" alt="Emotional Healing"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Emotional Healing</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/bfl5.jpg' %}" alt="Stress Relief"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/bfl3.jpg' %}" alt="Natural Balance"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Natural Balance</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/bffl4.jpg' %}" alt="Holistic Healing"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Holistic Healing</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mt-12 text-center">
+        <p class="text-xl text-gray-800 font-medium mb-6">
+          Ready to embrace the gentle yet powerful touch of nature?
+        </p>
+        <a href="{% url 'services' %}"
+          class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
+          Book Your Session Today
+        </a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
-<!-- yoga -->
-<section id="yoga" class="bg-[#F2F4E8] py-16 mt-12 rounded-lg shadow-lg mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Heading -->
-    <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
-      Yoga
-    </h2>
-    <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
-      <span class="font-bold text-[#205A28]">Reconnect</span> with your body, mind, and soul through the ancient practice of yoga.
-    </p>
 
-    <!-- Image Gallery -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/yoga.webp' %}" alt="Flexibility & Strength" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Flexibility & Strength</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/yoga2.jpeg' %}" alt="Stress Relief" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/yoga3.jpeg' %}" alt="Inner Peace" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Inner Peace</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/yoga4.png' %}" alt="Mindfulness" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Mindfulness</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Call to Action -->
-    <div class="mt-12 text-center">
-      <p class="text-xl text-gray-800 font-medium mb-6">
-        Ready to embark on a journey of self-discovery through yoga?
+  <!-- Face Lift & Body Processes (Access Bars) Section -->
+  <section id="access-bar" class="bg-[#EAF9F3] py-16 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Heading -->
+      <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
+        Face Lift & Body Processes
+      </h2>
+      <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
+        <span class="font-bold text-[#205A28]">Unlock</span> a natural glow and rejuvenate your mind and body through
+        Access Bars and Face Lift Body Processes. Experience deep relaxation, reduced stress, and enhanced overall
+        well-being.
       </p>
-      <a href="{% url 'services' %}" class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
-        Join a Class Now
-      </a>
+
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/fl5.jpg' %}" alt="Rejuvenating Session"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Rejuvenating Session</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/fl1.jpg' %}" alt="Stress Relief Therapy"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief Therapy</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/fl3.jpg' %}" alt="Mind & Body Balance"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Mind & Body Balance</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/fl6.jpg' %}" alt="Natural Glow Enhancement"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Natural Glow Enhancement</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mt-12 text-center">
+        <p class="text-xl text-gray-800 font-medium mb-6">
+          Ready to feel rejuvenated and stress-free?
+        </p>
+        <a href="{% url 'services' %}"
+          class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
+          Book Your Session Today
+        </a>
+      </div>
     </div>
-  </div>
+  </section>
+
+<!-- access bar therapy -->
+  <section id="access-bar-therapy" class="bg-[#EAF9F3] py-16 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Heading -->
+        <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
+            Access Bar Therapy
+        </h2>
+        <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
+            Discover the transformative power of <span class="font-bold text-[#205A28]">Access Bar Therapy</span>. Clear your mind, release stored emotions, and achieve profound relaxation for a balanced and harmonious life.
+        </p>
+
+        <!-- Image & Description Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden group transform transition duration-300 hover:scale-105">
+                <img src="{% static 'image/ab1.jpg' %}" alt="Energy Clearing Session" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-[#205A28] mb-2">Energy Clearing Session</h3>
+                    <p class="text-gray-700 text-sm">
+                        Release stagnant energy and invite a sense of lightness and clarity to your mind and body.
+                    </p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden group transform transition duration-300 hover:scale-105">
+              <img src="{% static 'image/ab4.jpg' %}" alt="Body Energy Renewal" class="w-full h-48 object-cover">
+              <div class="p-6">
+                  <h3 class="text-lg font-semibold text-[#205A28] mb-2">Body Energy Renewal</h3>
+                  <p class="text-gray-700 text-sm">
+                      Reconnect with your body’s energy and restore a sense of vitality and well-being.
+                  </p>
+              </div>
+          </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden group transform transition duration-300 hover:scale-105">
+                <img src="{% static 'image/ab2.jpg' %}" alt="Emotional Balance Therapy" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-[#205A28] mb-2">Emotional Balance Therapy</h3>
+                    <p class="text-gray-700 text-sm">
+                        Harmonize your emotions and experience deep inner peace with this restorative therapy.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="mt-12 text-center">
+            <p class="text-xl text-gray-800 font-medium mb-6">
+                Ready to clear your mind and embrace tranquility?
+            </p>
+            <a href="{% url 'services' %}"
+                class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
+                Schedule Your Therapy Session
+            </a>
+        </div>
+    </div>
 </section>
 
 
-
-<!-- meru -->
-
-<section id="meru" class="bg-[#E8F4F7] py-16 mt-12 rounded-lg shadow-lg mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Heading -->
-    <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
-      Meru
-    </h2>
-    <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
-      <span class="font-bold text-[#205A28]">Transform</span> your energy and posture through the therapeutic Meru technique.
-    </p>
-
-    <!-- Image Gallery -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/m4.jpg' %}" alt="Spinal Alignment" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Spinal Alignment</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/m2.jpg' %}" alt="Pain Relief" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Pain Relief</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/m3.jpg' %}" alt="Energy Balance" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Energy Balance</p>
-        </div>
-      </div>
-      <div class="relative group overflow-hidden rounded-lg shadow-lg">
-        <img src="{% static 'image/m1.jpg' %}" alt="Holistic Wellness" class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
-        <div class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <p class="text-white font-semibold text-lg group-hover:text-white">Holistic Wellness</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Call to Action -->
-    <div class="mt-12 text-center">
-      <p class="text-xl text-gray-800 font-medium mb-6">
-        Unlock your potential with Meru therapy and align your energy.
+  <!-- yoga -->
+  <section id="yoga" class="bg-[#F2F4E8] py-16 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Heading -->
+      <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
+        Yoga
+      </h2>
+      <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
+        <span class="font-bold text-[#205A28]">Reconnect</span> with your body, mind, and soul through the ancient
+        practice of yoga.
       </p>
-      <a href="{% url 'services' %}" class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
-        Book Your Meru Session
-      </a>
+
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/yon1.avif' %}" alt="Flexibility & Strength"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Flexibility & Strength</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/yon5.webp' %}" alt="Stress Relief"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Stress Relief</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/yon4.jpeg' %}" alt="Inner Peace"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Inner Peace</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/yon3.avif' %}" alt="Mindfulness"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Mindfulness</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mt-12 text-center">
+        <p class="text-xl text-gray-800 font-medium mb-6">
+          Ready to embark on a journey of self-discovery through yoga?
+        </p>
+        <a href="{% url 'services' %}"
+          class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
+          Join a Class Now
+        </a>
+      </div>
     </div>
-  </div>
+  </section>
+
+
+
+  <!-- meru -->
+
+  <section id="meru" class="bg-[#E8F4F7] py-16 mt-12 rounded-lg shadow-lg mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Heading -->
+      <h2 class="text-4xl font-extrabold text-[#205A28] text-center mb-8">
+        Meru Chikitsa
+      </h2>
+      <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto mb-12">
+        <span class="font-bold text-[#205A28]">Meru Chikitsa</span> is an ancient Ayurvedic healing technique that uses light touches on the spine to restore balance and improve overall well-being. It can help with: Improving posture and spinal alignment, Reducing pain and fatigue, Improving mind-body connection and emotional health, Increasing energy levels, and Reducing aches and pains. 
+        Meru Chikitsa incorporates breathwork, meditation, specific postures, and the manipulation of energy channels. It's suitable for people of different ages and health conditions.
+      </p>
+
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/m4.jpg' %}" alt="Spinal Alignment"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Spinal Alignment</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/m2.jpg' %}" alt="Pain Relief"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Pain Relief</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/m3.jpg' %}" alt="Energy Balance"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Energy Balance</p>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-lg shadow-lg">
+          <img src="{% static 'image/m5.jpg' %}" alt="Holistic Wellness"
+            class="w-full h-auto rounded-lg shadow-lg transform transition-transform duration-300 group-hover:scale-105">
+          <div
+            class="absolute inset-0 bg-[#205A28] bg-opacity-70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+            <p class="text-white font-semibold text-lg group-hover:text-white">Holistic Wellness</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mt-12 text-center">
+        <p class="text-xl text-gray-800 font-medium mb-6">
+          Unlock your potential with Meru therapy and align your energy.
+        </p>
+        <a href="{% url 'services' %}"
+          class="inline-block px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] transition duration-200">
+          Book Your Meru Session
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="benefits-meru" class="py-16 bg-gradient-to-b from-[#DFF5E9] to-[#E8FDF5] rounded-lg shadow-lg mt-12 mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-12">
+            Benefits of Meru Chikitsa
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    1
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Alternative Cure</h3>
+                <p class="text-gray-700 text-center">
+                    Provides relief for chronic and acute health conditions, even serious ailments, without side effects.
+                </p>
+            </div>
+
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    2
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Overall Health</h3>
+                <p class="text-gray-700 text-center">
+                    Enhances overall health and well-being while eliminating negative side effects.
+                </p>
+            </div>
+
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    3
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Pain Relief</h3>
+                <p class="text-gray-700 text-center">
+                    Reduces body pains and aches, providing a significant improvement in comfort and mobility.
+                </p>
+            </div>
+
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    4
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Posture & Flexibility</h3>
+                <p class="text-gray-700 text-center">
+                    Improves posture, spinal alignment, and flexibility, fostering a stronger and healthier body.
+                </p>
+            </div>
+
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    5
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Energy Boost</h3>
+                <p class="text-gray-700 text-center">
+                    Increases energy levels and reduces fatigue, promoting an active and vibrant lifestyle.
+                </p>
+            </div>
+
+            <!-- Benefit Item -->
+            <div class="relative bg-white rounded-lg shadow-lg p-8 hover:shadow-2xl transition duration-300">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#1B8366] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-md">
+                    6
+                </div>
+                <h3 class="text-xl font-semibold text-center text-[#205A28] mt-8 mb-4">Mental Health</h3>
+                <p class="text-gray-700 text-center">
+                    Supports emotional and mental well-being, fostering a calmer and more balanced state of mind.
+                </p>
+            </div>
+        </div>
+    </div>
 </section>
 
 
 
-
-<!-- contact us section -->
-<section id="contact" class="bg-[#EDF9F2] py-16 rounded-lg shadow-lg mt-12 mx-4">
+  <!-- contact us section -->
+<section id="contact" class="bg-gradient-to-r from-[#DFF5E9] to-[#E8FDF5] py-16 rounded-lg shadow-lg mt-12 mx-4">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Heading -->
-    <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-6">Get in Touch</h2>
-    <p class="text-md text-center text-gray-600 mb-10">
-      Have questions or need more information? Drop us a message, and we’ll get back to you soon!
+    <h2 class="text-4xl font-extrabold text-center text-[#205A28] mb-6">We’re Here to Help!</h2>
+    <p class="text-lg text-center text-gray-700 mb-10">
+      Got questions, concerns, or just want to know more about our services? Let’s talk! We’re always eager to hear from you and assist you in any way we can.
     </p>
 
-    <!-- Form Wrapper -->
-    <div class="max-w-4xl mx-auto bg-white p-10 rounded-lg shadow-xl">
-      <form action="contact" method="POST" class="space-y-8">
-        {% csrf_token %}
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Name -->
-          <div class="form-group">
-            <label for="name" class="block text-lg font-medium text-gray-700 mb-2">Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              name="name" 
-              placeholder="Your Name" 
-              required 
-              class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]"
-            />
-          </div>
-
-          <!-- Email -->
-          <div class="form-group">
-            <label for="email" class="block text-lg font-medium text-gray-700 mb-2">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              placeholder="Your Email" 
-              required 
-              class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]"
-            />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Phone -->
-          <div class="form-group">
-            <label for="phone" class="block text-lg font-medium text-gray-700 mb-2">Phone</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              name="mobile_number" 
-              placeholder="Your Phone Number" 
-              required 
-              class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]"
-            />
-          </div>
-
-          <!-- Subject -->
-          <div class="form-group">
-            <label for="subject" class="block text-lg font-medium text-gray-700 mb-2">Subject</label>
-            <input 
-              type="text" 
-              id="subject" 
-              name="subject" 
-              placeholder="Subject" 
-              required 
-              class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]"
-            />
-          </div>
-        </div>
-
-        <!-- enquiry for -->
-
-        <div class="form-group">
-          <label for="enquiry" class="block text-lg font-medium text-gray-700 mb-2">Enquiry</label>
-          <select 
-            id="enquiry" 
-            name="enquiry" 
-            required 
-            class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]">
-            <option value="" disabled selected>Select your option</option>
-            <option value="yoga">Yoga</option>
-            <option value="meru">Meru</option>
-            <option value="cst">Craniosacral Therapy (CST)</option>
-            <option value="bach_flower">Batch Flower Remedies</option>
-            <option value="facelift">Facelift</option>
-            <option value="others">others</option>
-            
-          </select>
-        </div>
-        
-        <!-- Message -->
-        <div class="form-group">
-          <label for="message" class="block text-lg font-medium text-gray-700 mb-2">Message</label>
-          <textarea 
-            id="message" 
-            name="message" 
-            rows="6" 
-            placeholder="Write your message here..." 
-            required 
-            class="block w-full px-4 py-3 text-gray-800 rounded-lg border border-gray-300 focus:ring-[#1B8366] focus:border-[#1B8366]"
-          ></textarea>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="text-center">
-          <button 
-            type="submit" 
-            class="px-8 py-3 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-lg hover:bg-[#174E20] focus:outline-none focus:ring-2 focus:ring-[#1B8366] focus:ring-offset-2 transition-all duration-200"
-          >
-            Send Message
-          </button>
-        </div>
-      </form>
+    <!-- Call to Action -->
+    <div class="text-center">
+      <a href="{% url 'contact' %}" 
+        class="px-10 py-4 bg-[#205A28] text-white text-lg font-semibold rounded-lg shadow-md hover:bg-[#174E20] focus:outline-none focus:ring-4 focus:ring-[#1B8366] focus:ring-offset-2 transition-all duration-200">
+        Contact Us Now
+      </a>
     </div>
+    
   </div>
 </section>
 
-<a 
-    href="https://wa.me/+917004349469?text=Hello! I have an enquiry for..." 
-    target="_blank" 
-    class="whatsapp-button" 
+
+  
+
+  <a href="https://wa.me/+917004349469?text=Hello! I have an enquiry for..." target="_blank" class="whatsapp-button"
     title="Chat with us on WhatsApp">
-    <img 
-      src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-      alt="WhatsApp Logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
   </a>
 
-<!-- Footer Section -->
-<footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Upper Section: Quick Links and About -->
-    <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
-      <!-- About Us -->
-      <div>
-        <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
-        <ul class="space-y-2">
-          <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
-          <li><strong>CEO:</strong> Shivani Arora</li>
-          <li><strong>Support:</strong> Shveta Arora</li>
-          <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
-        </ul>
-      </div>
+  <!-- Footer Section -->
+  <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Upper Section: Quick Links and About -->
+      <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+        <!-- About Us -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+          <ul class="space-y-2">
+            <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+            <li><strong>CEO:</strong> Shivani Arora</li>
+            <li><strong>Support:</strong> Shveta Arora</li>
+            <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+          </ul>
+        </div>
 
-      <!-- Quick Links -->
-      <div>
-        <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
-        <ul class="space-y-2">
-          <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
-          <li><a href="#about" class="hover:text-blue-400">About</a></li>
-          <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
-          <li><a href="#contact" class="hover:text-blue-400">Contact</a></li>
-        </ul>
-      </div>
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+            <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
+            <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
+          </ul>
+        </div>
 
-      <!-- Services Offered -->
-      <div>
-        <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
-        <ul class="space-y-2">
-          <li><a href="#cst" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
-          <li><a href="#batch" class="hover:text-blue-400">Batch Flower Remedies</a></li>
-          <li><a href="#access-bar" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
-          <li><a href="#yoga" class="hover:text-blue-400">Yoga</a></li>
-          <li><a href="#meru" class="hover:text-blue-400">Meru</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Middle Section: Social Media and Map -->
-    <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
-      <!-- Social Media Links -->
-      <div>
-        <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
-        <div class="flex space-x-4">
-          <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-facebook fa-lg"></i></a>
-          <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
-          <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>
-          <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>
+        <!-- Services Offered -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+          <ul class="space-y-2">
+            <li><a href="#cst" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+            <li><a href="#batch" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+            <li><a href="#access-bar" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
+            <li><a href="#yoga" class="hover:text-blue-400">Yoga</a></li>
+            <li><a href="#meru" class="hover:text-blue-400">Meru</a></li>
+          </ul>
         </div>
       </div>
 
-      <!-- Map View -->
-      <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
-        <iframe 
-          class="w-full h-full"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin" 
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+      <!-- Middle Section: Social Media and Map -->
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+        <!-- Social Media Links -->
+        <div>
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                class="fab fa-facebook fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                class="fab fa-instagram fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                class="fab fa-twitter fa-lg"></i></a>
+            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                class="fab fa-linkedin fa-lg"></i></a>
+          </div>
+        </div>
+
+        <!-- Map View -->
+        <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+          <iframe class="w-full h-full"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+        <p>&copy; 2024 Heal. All rights reserved.</p>
+        <p>Waiting for copyright</p>
       </div>
     </div>
-
-    <!-- Bottom Section -->
-    <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
-      <p>&copy; 2024 Heal. All rights reserved.</p><p>Waiting for copyright</p>
-    </div>
-  </div>
-</footer>
+  </footer>
 
 
 
@@ -776,4 +940,5 @@
     });
   </script>
 </body>
+
 </html>
