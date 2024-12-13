@@ -1,0 +1,367 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Page</title>
+  <script src="{% static 'js/tailwind.js' %}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link
+    href="{% static 'css/cloudfare.css' %}"
+    rel="stylesheet">
+  <style>
+      body {
+          font-family: 'Inter', sans-serif;
+        }
+    
+        h1,
+        h2 {
+          font-family: 'Playfair Display', serif;
+        }
+        .text-gold {
+          color: #FFD700; /* Gold color */
+        }
+        .border-gold {
+          border-color: #FFD700; /* Gold border */
+        }
+  </style>
+</head>
+
+<body class="font-sans antialiased">
+    <!-- Navbar -->
+    <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 border-2 rounded-b-lg">
+      <div class="container mx-auto flex items-center justify-between p-4">
+        <!-- Logo and Title -->
+        <div class="flex items-center space-x-3">
+          <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full border-2 border-gold">
+          <h1 class="text-3xl font-bold tracking-wide text-gold ">KM Healing Foundation</h1>
+        </div>
+        <!-- Hamburger Button -->
+        <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
+          ☰
+        </button>
+        <!-- Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+          <ul class="flex space-x-6 text-lg font-semibold">
+            <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+            <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
+            <li><a href="{% url 'contact' %}" class="hover:underline">Contact</a></li>
+          </ul>
+          <!-- Login and Sign Up Buttons -->
+          <div class="flex space-x-4">
+            {% if user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Profile
+            </a>
+              {% else %}
+              <a href="{% url 'profile' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Profile
+            </a>
+              {% endif %}
+            <a href="{% url 'logout' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Logout
+            </a>
+  
+            {% else %}
+            <a href="{% url 'login' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Login
+            </a>
+            <a href="{% url 'register' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Signup
+            </a>
+  
+            {% endif %}
+  
+          </div>
+        </div>
+      </div>
+      <!-- Dropdown for Small Screens -->
+      <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
+        <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
+        <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
+        <li><a href="{% url 'contact' %}" class="hover:underline block">Contact</a></li>
+        {% if user.is_authenticated %}
+              {% if request.user.is_staff %}
+              <a href="{% url 'admin_dashboard' %}" class="hover:underline block">profile</a>
+              {% else %}
+              <li><a href="{% url 'profile' %}" class="hover:underline block">Profile</a></li>
+              {% endif %}
+        
+        <li><a href="{% url 'logout' %}" class="hover:underline block">Logout</a></li>
+        
+        {% else %}
+        <li><a href="{% url 'login' %}" class="hover:underline block">Login</a></li>
+        <li><a href="{% url 'register' %}" class="hover:underline block">Signup</a></li>
+        
+  
+        {% endif %}
+      </ul>
+    </nav>
+  <!-- Booking Page Wrapper -->
+  <div class="container mx-auto px-4 py-8 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Booked Session Details -->
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
+        <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Your Booking</h2>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-[#205A28] mb-4">{{ service.title }}</h3>
+          <ul class="space-y-2 text-gray-700 mb-4">
+            <li><strong>Duration:</strong> {{ service.duration }}</li>
+            <li><strong>Mode of Service:</strong> {{ service.mode_of_service }}</li>
+            <li><strong>Location:</strong> {{ service.location }}</li>
+            <li><strong>Instructor:</strong> {{ service.instructor }}</li>
+            <li><strong>Session Date:</strong> From {{ service.from_date|date:"F j, Y" }} to {{service.to_date|date:"F j, Y" }}</li>
+            <li><strong>Time:</strong> From {{ service.time_from|time:"g:i A" }} to {{ service.time_to|time:"g:i A" }}
+            </li>
+            <li><strong>Price:</strong> ₹{{ service.price }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
+        <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Make a Booking</h2>
+        <form  action="{% url 'book_session' service.id %}" method="POST" class="space-y-6">
+          {% csrf_token %}
+          <!-- First Name -->
+          <div>
+            <label for="firstname" class="block text-gray-800 font-medium mb-2">First Name</label>
+            <input type="name" id="firstname" name="firstname" value="{{ user.first_name }}" required readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none"
+              placeholder="Enter your first name" />
+          </div>
+          <!-- Last Name -->
+          <div>
+            <label for="lastname" class="block text-gray-800 font-medium mb-2">Last Name</label>
+            <input type="name" id="lastname" name="lastname" value="{{ user.last_name }}" required readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none"
+              placeholder="Enter your last name" />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-gray-800 font-medium mb-2">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none"
+              placeholder="Enter your email address" />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-gray-800 font-medium mb-2">Phone</label>
+            <input type="tel" id="phone" name="phone" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none"
+              placeholder="Enter your phone number" />
+          </div>
+
+          <!-- gender -->
+          <div>
+            <label for="gender" class="block text-gray-800 font-medium mb-2">Gender</label>
+            <select id="gender" name="gender" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none">
+              <option value="">-- Choose your gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <!-- Date of birth -->
+          <div>
+            <label for="dob" class="block text-gray-800 font-medium mb-2">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none"
+              onchange="calculateAge()" />
+          </div>
+
+          <!-- Age -->
+          <div>
+            <label for="age" class="block text-gray-800 font-medium mb-2">Age</label>
+            <input type="number" id="age" name="age" readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#205A28] focus:outline-none bg-gray-100" />
+          </div>
+
+          <!-- Accept Terms and Conditions -->
+          <div>
+            <label class="block text-gray-800 font-medium mb-2">Terms and Conditions</label>
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" id="terms" name="terms" required
+                class="focus:ring-2 focus:ring-[#205A28] focus:outline-none" />
+              <label for="terms" class="text-gray-700">
+                I accept the <a href="#" onclick="openTerms()" class="text-green-600 hover:underline">terms and
+                  conditions</a>.
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit"
+            class="w-full bg-[#205A28] hover:bg-green-700 text-white font-medium py-2 px-4 rounded transition transform hover:scale-105">
+            Book Now
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="termsModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <h2 class="text-xl font-bold text-[#205A28] mb-4">Terms and Conditions</h2>
+      <div class="text-gray-700 space-y-4 overflow-y-auto max-h-64">
+        <p>
+          1. Booking is subject to availability and confirmation by the service provider.
+        </p>
+        <p>
+          2. Cancellation charges may apply as per the company's cancellation policy.
+        </p>
+        <p>
+          3. Customers must arrive on time for booked sessions. Late arrivals may result in shortened sessions.
+        </p>
+        <p>
+          4. Payment must be completed before the session begins.
+        </p>
+        <p>
+          5. The company reserves the right to modify or cancel bookings under special circumstances.
+        </p>
+        <p>
+          For more details, contact support@example.com.
+        </p>
+      </div>
+      <button onclick="closeTerms()"
+        class="mt-4 w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded transition transform hover:scale-105">
+        Close
+      </button>
+    </div>
+  </div>
+
+      <!-- Footer Section -->
+      <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Upper Section: Quick Links and About -->
+          <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+            <!-- About Us -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+              <ul class="space-y-2">
+                <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+                <li><strong>CEO:</strong> Shivani Arora</li>
+                <li><strong>Support:</strong> Shveta Arora</li>
+                <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+              </ul>
+            </div>
+    
+            <!-- Quick Links -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+              <ul class="space-y-2">
+                <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
+                <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
+              </ul>
+            </div>
+    
+            <!-- Services Offered -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+              <ul class="space-y-2">
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Yoga</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Meru</a></li>
+              </ul>
+            </div>
+          </div>
+    
+          <!-- Middle Section: Social Media and Map -->
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+            <!-- Social Media Links -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+              <div class="flex space-x-4">
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-linkedin fa-lg"></i></a>
+              </div>
+            </div>
+    
+            <!-- Map View -->
+            <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+              <iframe class="w-full h-full"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+    
+          <!-- Bottom Section -->
+          <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+            <p>&copy; 2024 Heal. All rights reserved.</p>
+            <p>Waiting for copyright</p>
+          </div>
+        </div>
+      </footer>
+
+  <!-- Optional JavaScript for handling form submissions -->
+  <script>
+
+    function calculateAge() {
+      const dobInput = document.getElementById('dob').value; // Get the DOB value
+      const ageInput = document.getElementById('age'); // Get the age field
+      const menuToggle = document.getElementById('menu-toggle');
+        const dropdown = document.getElementById('dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+    });
+
+      if (dobInput) {
+        const dob = new Date(dobInput);
+        const today = new Date();
+
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+          age--;
+        }
+
+        ageInput.value = age; // Set the calculated age
+      } else {
+        ageInput.value = ''; // Clear the age field if DOB is empty
+      }
+    }
+    // Function to open the modal
+    function openTerms() {
+      document.getElementById('termsModal').classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeTerms() {
+      document.getElementById('termsModal').classList.add('hidden');
+    }
+    const menuToggle = document.getElementById('menu-toggle');
+        const dropdown = document.getElementById('dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
+
+
+  </script>
+</body>
+
+</html>

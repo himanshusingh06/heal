@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <script src="{% static 'js/tailwind.js' %}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link
+    href="{% static 'css/cloudfare.css' %}"
+    rel="stylesheet">
+  <style>
+    body {
+      background-color: #f6fbf8;
+    }
+
+    .sidebar-button {
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar-button:hover {
+      background-color: #205A28;
+      color: #fbfbfb;
+    }
+
+    .active {
+      background-color: #205A28;
+      color: #f6f6f6;
+    }
+      body {
+          font-family: 'Inter', sans-serif;
+        }
+    
+        h1,
+        h2 {
+          font-family: 'Playfair Display', serif;
+        }
+        .text-gold {
+          color: #FFD700; /* Gold color */
+        }
+        .border-gold {
+          border-color: #FFD700; /* Gold border */
+        }
+  </style>
+</head>
+
+<body class="font-sans">
+    <!-- Navbar -->
+    <nav class="bg-[#2E8B57] text-white shadow-lg top-0 z-50 rounded-b-lg">
+      <div class="container mx-auto flex items-center justify-between p-4">
+        <!-- Logo and Title -->
+        <div class="flex items-center space-x-3">
+          <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full border-2 border-gold">
+          <h1 class="text-3xl font-bold tracking-wide text-gold ">KM Healing Foundation</h1>
+        </div>
+        <!-- Hamburger Button -->
+        <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
+          ☰
+        </button>
+        <!-- Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+          <ul class="flex space-x-6 text-lg font-semibold">
+            <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+            <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
+            <li><a href="{% url 'contact' %}" class="hover:underline">Contact</a></li>
+          </ul>
+          <!-- Login and Sign Up Buttons -->
+          <div class="flex space-x-4">
+            {% if user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Profile
+            </a>
+              {% else %}
+              <a href="{% url 'profile' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Profile
+            </a>
+              {% endif %}
+            <a href="{% url 'logout' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Logout
+            </a>
+  
+            {% else %}
+            <a href="{% url 'login' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Login
+            </a>
+            <a href="{% url 'register' %}"
+              class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+              Signup
+            </a>
+  
+            {% endif %}
+  
+          </div>
+        </div>
+      </div>
+      <!-- Dropdown for Small Screens -->
+      <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
+        <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
+        <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
+        <li><a href="{% url 'contact' %}" class="hover:underline block">Contact</a></li>
+        {% if user.is_authenticated %}
+              {% if request.user.is_staff %}
+              <a href="{% url 'admin_dashboard' %}" class="hover:underline block">profile</a>
+              {% else %}
+              <li><a href="{% url 'profile' %}" class="hover:underline block">Profile</a></li>
+              {% endif %}
+        
+        <li><a href="{% url 'logout' %}" class="hover:underline block">Logout</a></li>
+        
+        {% else %}
+        <li><a href="{% url 'login' %}" class="hover:underline block">Login</a></li>
+        <li><a href="{% url 'register' %}" class="hover:underline block">Signup</a></li>
+        
+  
+        {% endif %}
+      </ul>
+    </nav>
+  <!-- Floating Menu Button -->
+  <div class="absolute top-4 left-4 z-50 md:hidden">
+    <button id="menuButton" class="p-2 bg-white rounded shadow-lg focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+        class="w-6 h-6 text-gray-800">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="w-64 bg-white shadow-lg fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:static transition-transform z-40">
+      <div class="p-6">
+        <div class="text-center">
+          <img src="{% static 'image/userprofile.jpg' %}" alt="User Avatar" class="w-24 h-24 mx-auto rounded-full">
+          <h2 class="mt-4 text-xl font-semibold text-gray-800">{{ user.username }}</h2>
+          <p class="text-gray-500">{{ user.get_full_name }}</p>
+        </div>
+        <div class="mt-5 bg-[#E5F7ED] rounded-lg p-2 shadow-md">
+          <ul class="mt-6 space-y-4">
+            <li>
+              <button onclick="showSection('details')"
+                class="block w-full px-4 py-2 text-left sidebar-button text-gray-700 rounded">Personal Details</button>
+            </li>
+            <li>
+              <button onclick="showSection('services')"
+                class="block w-full px-4 py-2 text-left sidebar-button text-gray-700 rounded">Services Opted</button>
+            </li>
+            <li>
+              <button onclick="showSection('payment-status')"
+                class="block w-full px-4 py-2 text-left sidebar-button text-gray-700 rounded">Payment Status</button>
+            </li>
+            <li>
+              <button onclick="showSection('order-history')"
+                class="block w-full px-4 py-2 text-left sidebar-button text-gray-700 rounded">Order History</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <!-- Sections -->
+      <section id="details" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
+        <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Personal Details</h2>
+        <div class="mt-4">
+          <p><span class="font-medium text-gray-600">Username:</span> {{ user.username }} </p>
+          <p><span class="font-medium text-gray-600">Name:</span> {{ user.get_full_name }}</p>
+          <p><span class="font-medium text-gray-600">Email:</span> {{ user.email }}</p>
+        </div>
+      </section>
+
+
+
+      <section id="services" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
+        <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Booking History</h2>
+        <ul class="space-y-4">
+          {% for booking in bookings %}
+          <li class="border-b pb-4">
+            <h3 class="font-medium">{{ booking.first_name }} {{ booking.last_name }}</h3>
+            <p>Email: {{ booking.email }}</p>
+            <p>Phone: {{ booking.phone }}</p>
+            <p>Gender: {{ booking.gender }}</p>
+            <p>Date of Birth: {{ booking.date_of_birth }}</p>
+            <p>Age: {{ booking.age }}</p>
+            <P>Session Name: {{ booking.service_title }}</P>
+            <p>Duration: {{ booking.service_duration }}</p>
+            <p>Mode of Service: {{ booking.service_mode }}</p>
+            <p>Location: {{ booking.service_location }}</p>
+            <p>Instructor: {{ booking.service_instructor }}</p>
+            <p>Session Date: From {{ booking.service_date_from|date:"F j, Y" }} to {{ booking.service_date_to|date:"F j, Y" }}</p>
+            <p>Time: From {{ booking.service_time_from|time:"g:i A" }} to {{ booking.service_time_to|time:"g:i A" }}
+            </p>
+            <p><strong>Price:</strong> ₹{{ booking.service_price }}</p>
+            <p>Booked on: {{ booking.created_at }}</p>
+          </li>
+          {% empty %}
+          <p>No bookings found.</p>
+          {% endfor %}
+
+        </ul>
+      </section>
+
+
+
+      <section id="payment-status" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
+        <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Payment Status</h2>
+        <div class="mt-4">
+          <p><span class="font-medium text-gray-600">Total Amount Paid:</span> No data found</p>
+          <p><span class="font-medium text-gray-600">Outstanding Balance:</span> No data found</p>
+        </div>
+      </section>
+
+      <section id="order-history" class="content-section bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
+        <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Order History</h2>
+        <table class="w-full mt-4 border">
+          <thead>
+            <tr class="bg-gray-200 text-left">
+              <th class="py-2 px-4">Order ID</th>
+              <th class="py-2 px-4">Service</th>
+              <th class="py-2 px-4">Date</th>
+              <th class="py-2 px-4">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-2 px-4">No data found</td>
+              <td class="py-2 px-4">No data found</td>
+              <td class="py-2 px-4">No data found</td>
+              <td class="py-2 px-4">No data found</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4"></td>
+              <td class="py-2 px-4">No data found</td>
+              <td class="py-2 px-4">No data found</td>
+              <td class="py-2 px-4">No data found</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+      <!-- Footer Section -->
+      <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Upper Section: Quick Links and About -->
+          <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+            <!-- About Us -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+              <ul class="space-y-2">
+                <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+                <li><strong>CEO:</strong> Shivani Arora</li>
+                <li><strong>Support:</strong> Shveta Arora</li>
+                <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+              </ul>
+            </div>
+    
+            <!-- Quick Links -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+              <ul class="space-y-2">
+                <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
+                <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
+              </ul>
+            </div>
+    
+            <!-- Services Offered -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+              <ul class="space-y-2">
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Yoga</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-blue-400">Meru</a></li>
+              </ul>
+            </div>
+          </div>
+    
+          <!-- Middle Section: Social Media and Map -->
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+            <!-- Social Media Links -->
+            <div>
+              <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+              <div class="flex space-x-4">
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                    class="fab fa-linkedin fa-lg"></i></a>
+              </div>
+            </div>
+    
+            <!-- Map View -->
+            <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+              <iframe class="w-full h-full"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+    
+          <!-- Bottom Section -->
+          <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+            <p>&copy; 2024 Heal. All rights reserved.</p>
+            <p>Waiting for copyright</p>
+          </div>
+        </div>
+      </footer>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const menuButton = document.getElementById('menuButton');
+    const menuToggle = document.getElementById('menu-toggle');
+        const dropdown = document.getElementById('dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+    });
+    // Toggle sidebar visibility
+    menuButton.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+    });
+
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(section => section.classList.add('hidden'));
+
+      // Show the selected section
+      document.getElementById(sectionId).classList.remove('hidden');
+
+      // Update button states
+      document.querySelectorAll('.sidebar-button').forEach(button => button.classList.remove('active'));
+      document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+    }
+
+    // Show the first section by default
+    showSection('details');
+  </script>
+</body>
+
+</html>

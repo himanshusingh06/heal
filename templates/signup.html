@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heal Signup</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .input-focus:focus {
+            box-shadow: 0 0 8px #60a5fa;
+        }
+    
+            body {
+                font-family: 'Inter', sans-serif;
+              }
+          
+              h1,
+              h2 {
+                font-family: 'Playfair Display', serif;
+              }
+              .text-gold {
+                color: #FFD700; /* Gold color */
+              }
+              .border-gold {
+                border-color: #FFD700; /* Gold border */
+              }
+    
+    </style>
+</head>
+
+<body class="bg-[#F4F4F4]">
+    <nav class="bg-[#2E8B57] text-white shadow-lg top-0 z-50 rounded-b-lg">
+        <div class="container mx-auto flex items-center justify-between p-4">
+            <!-- Logo and Title -->
+            <div class="flex items-center space-x-3">
+                <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full border-2 border-gold">
+                <h1 class="text-3xl font-bold tracking-wide text-gold">KM Healing Foundation</h1>
+            </div>
+            <!-- Hamburger Button -->
+            <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
+                ☰
+            </button>
+            <!-- Menu -->
+            <div class="hidden md:flex items-center space-x-6">
+                <ul class="flex space-x-6 text-lg font-semibold">
+                    <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+                    <li><a href="{% url 'home' %}" class="hover:underline">About Us</a></li>
+                    <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
+                    <li><a href="{% url 'home' %}" class="hover:underline">Contact</a></li>
+                    <div class="flex space-x-4">
+                        {% if user.is_authenticated %}
+                        {% if request.user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Profile
+                        </a>
+                          {% else %}
+                          <a href="{% url 'profile' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Profile
+                        </a>
+                          {% endif %}
+                        <a href="{% url 'logout' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Logout
+                        </a>
+              
+                        {% else %}
+                        <a href="{% url 'login' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Login
+                        </a>
+                        <a href="{% url 'register' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Signup
+                        </a>
+              
+                        {% endif %}
+
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <!-- Dropdown for Small Screens -->
+        <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
+            <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
+            <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
+            <li><a href="{% url 'contact' %}" class="hover:underline block">Contact</a></li>
+            {% if user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}" class="hover:underline block">profile</a>
+            {% else %}
+            <li><a href="{% url 'profile' %}" class="hover:underline block">Profile</a></li>
+            {% endif %}
+      
+      <li><a href="{% url 'logout' %}" class="hover:underline block">Logout</a></li>
+      
+      {% else %}
+      <li><a href="{% url 'login' %}" class="hover:underline block">Login</a></li>
+      <li><a href="{% url 'register' %}" class="hover:underline block">Signup</a></li>
+      
+
+      {% endif %}
+        </ul>
+    </nav>
+
+    <div class="bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 min-h-screen flex items-center justify-center rounded-lg shadow-lg mt-12 mx-4 py-12">
+        <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div style="color: #0ec435;">{{ message }}</div>
+            {% else %}
+                <div style="color: #c00427;">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+            <!-- Header -->
+            <div class="text-center">
+                <img src="{% static 'image/userprofile.jpg' %}" alt="Heal Logo" class="w-20 mx-auto">
+                <h2 class="text-2xl font-semibold text-gray-800 mt-4">Create Your Account</h2>
+                <p class="text-gray-600">Join Heal and start your wellness journey.</p>
+            </div>
+
+            <!-- Form -->
+            <form class="mt-6"  action="/register" method="POST">
+                {% csrf_token %}
+                <!-- Name Field -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- First Name Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2">First Name</label>
+                        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                            placeholder="Enter your first name" name="f_name" required/>
+                    </div>
+                    <!-- Last Name Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2">Last Name</label>
+                        <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                            placeholder="Enter your last name" name="l_name" required/>
+                    </div>
+                </div>
+
+                <!-- Username Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Username</label>
+                    <input type="username" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                        placeholder="Enter your username" name="username" required/>
+                </div>
+                <!-- Email Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Email</label>
+                    <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                        placeholder="Enter your email" name="email" required/>
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                        placeholder="Create a password" name="password1" required/>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+                    <input type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
+                        placeholder="Confirm your password" name="password2" required/>
+                </div>
+
+                <!-- Signup Button -->
+                <button type="submit"
+                    class="w-full py-2 mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold rounded-lg shadow-md hover-scale">
+                    Sign Up
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="mt-4 text-center">
+                <p class="text-gray-600">
+                    Already have an account?
+                    <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Log In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Upper Section: Quick Links and About -->
+            <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+                <!-- About Us -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+                    <ul class="space-y-2">
+                        <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+                        <li><strong>CEO:</strong> Shivani Arora</li>
+                        <li><strong>Support:</strong> Shveta Arora</li>
+                        <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services Offered -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body
+                                Processes</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">yoga</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">meru</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Middle Section: Social Media and Map -->
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+                <!-- Social Media Links -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+                    <iframe class="w-full h-full"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+                <p>&copy; 2024 Heal. All rights reserved.</p>
+                <p>Waiting for copyright</p>
+            </div>
+        </div>
+    </footer>
+    
+
+    <script>
+
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const dropdown = document.getElementById('dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
+    </script>
+
+
+    
+</body>
+
+</html>
