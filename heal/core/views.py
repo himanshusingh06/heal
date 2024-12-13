@@ -12,7 +12,9 @@ from .models import Booking
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
-
+from .models import Verified
+from .utils import *
+import uuid
 def services(request):
     services = Service.objects.all()  # Fetch all services from the database
     return render(request, 'services.html', {'services': services})
@@ -76,34 +78,84 @@ def register(request):
         pass1 = request.POST.get('password1')
         pass2 = request.POST.get('password2')
 
-        # Check if username or email already exists
+        # Check if username is already taken
         if User.objects.filter(username=uname).exists():
-            messages.error(request, "Username already exists!")
-            return redirect('register')
-        elif User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists!")
-            return redirect('register')
-        elif pass1 != pass2:
+    # Check if the username is associated with an unverified user
+            existing_user_by_username = User.objects.filter(username=uname).first()
+            if existing_user_by_username:
+                verified_obj = Verified.objects.filter(user=existing_user_by_username).first()
+                if verified_obj and not verified_obj.is_verified:
+            # Delete unverified user
+                    existing_user_by_username.delete()
+                else:
+                    messages.error(request, "Username already exists!")
+                    return redirect('register')
+
+# Check if the email is registered and verified
+        existing_user_by_email = User.objects.filter(email=email).first()
+        if existing_user_by_email:
+            verified_obj = Verified.objects.filter(user=existing_user_by_email).first()
+            if verified_obj and verified_obj.is_verified:
+                messages.error(request, "Email already exists!")
+                return redirect('register')
+            else:
+        # Delete unverified user
+                existing_user_by_email.delete()
+        # Check if passwords match
+        if pass1 != pass2:
             messages.error(request, "Your password and confirm password are not the same!")
             return redirect('register')
 
         # Validate password strength
         try:
-            validate_password(pass1)  # This will raise a ValidationError if the password is weak
+            validate_password(pass1)  # Raises ValidationError for weak passwords
         except ValidationError as e:
-            # Add error messages for weak password
             for error in e:
                 messages.error(request, error)
             return redirect('register')
 
-        # Create new user
-        my_user = User(username=uname, email=email, first_name=first_name, last_name=last_name)
-        my_user.set_password(pass1)  # Use set_password() to properly hash the password
+        # Save the User object but keep it inactive
+        my_user = User(
+            username=uname,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            is_active=False  # User is inactive by default
+        )
+        my_user.set_password(pass1)
         my_user.save()
-        messages.success(request, "Your account has been created successfully!")
-        return redirect('login')
+
+        # Create Verified object
+        v_obj = Verified.objects.create(
+            user=my_user,
+            email_token=str(uuid.uuid4())
+        )
+
+        # Send email token
+        send_email_token(email, v_obj.email_token)
+
+        return render(request, 'verify_email.html')
+
     else:
         return render(request, 'signup.html')
+
+        
+
+def verify(request, token):
+    try:
+        obj = Verified.objects.get(email_token=token)
+        obj.is_verified = True
+        obj.save()
+
+        # Activate the user
+        obj.user.is_active = True
+        obj.user.save()
+
+        messages.success(request, "Your account has been created successfully!")
+        return redirect('login')
+    except Verified.DoesNotExist:
+        messages.error(request, "Invalid or expired token.")
+        return redirect('register')
 
         
 

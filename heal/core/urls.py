@@ -16,7 +16,7 @@ urlpatterns = [
     path('manage-services/', views.manage_services, name='manage_services'),
     path('manage-services/add/', views.add_service, name='add_service'),
     # path('manage-services/edit/<int:service_id>/', views.edit_service, name='edit_service'),
-    path('manage-services/delete/<int:service_id>/', views.delete_service, name='delete_service')
+    path('manage-services/delete/<int:service_id>/', views.delete_service, name='delete_service'),
+    path('verify/<str:token>', views.verify, name='verify'),
 
-   
 ]

@@ -5,41 +5,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heal Login</title>
+    <title>Email Verification</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap"
-        rel="stylesheet">
     <style>
         .hover-scale:hover {
             transform: scale(1.05);
             transition: transform 0.3s ease-in-out;
         }
-
-        .input-focus:focus {
-            box-shadow: 0 0 8px #60a5fa;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
         }
-            body {
-                font-family: 'Inter', sans-serif;
-              }
-          
-              h1,
-              h2 {
-                font-family: 'Playfair Display', serif;
-              }
-              .text-gold {
-                color: #FFD700; /* Gold color */
-              }
-              .border-gold {
-                border-color: #FFD700; /* Gold border */
-              }
-
+        h1 {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-gold {
+            color: #FFD700; /* Gold color */
+          }
+        .border-gold {
+            border-color: #FFD700; /* Gold border */
+          }
     </style>
 </head>
 
-<body class="bg-[#F4F4F4]">
+<body>
     <nav class="bg-[#2E8B57] text-white shadow-lg top-0 z-50 rounded-b-lg">
         <div class="container mx-auto flex items-center justify-between p-4">
             <!-- Logo and Title -->
@@ -55,40 +46,40 @@
             <div class="hidden md:flex items-center space-x-6">
                 <ul class="flex space-x-6 text-lg font-semibold">
                     <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+                    <li><a href="{% url 'home' %}" class="hover:underline">About Us</a></li>
                     <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
-                    <li><a href="{% url 'contact' %}" class="hover:underline">Contact</a></li>
+                    <li><a href="{% url 'home' %}" class="hover:underline">Contact</a></li>
                     <div class="flex space-x-4">
                         {% if user.is_authenticated %}
-          {% if request.user.is_staff %}
-          <a href="{% url 'admin_dashboard' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Profile
-          </a>
-            {% else %}
-            <a href="{% url 'profile' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Profile
-          </a>
-            {% endif %}
-          <a href="{% url 'logout' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Logout
-          </a>
-
-          {% else %}
-          <a href="{% url 'login' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Login
-          </a>
-          <a href="{% url 'register' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Signup
-          </a>
-
-          {% endif %}
+                        {% if request.user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Profile
+                        </a>
+                          {% else %}
+                          <a href="{% url 'profile' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Profile
+                        </a>
+                          {% endif %}
+                        <a href="{% url 'logout' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Logout
+                        </a>
+              
+                        {% else %}
+                        <a href="{% url 'login' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Login
+                        </a>
+                        <a href="{% url 'register' %}"
+                          class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
+                          Signup
+                        </a>
+              
+                        {% endif %}
 
                     </div>
-
                 </ul>
             </div>
         </div>
@@ -114,59 +105,31 @@
       {% endif %}
         </ul>
     </nav>
+    <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 rounded-lg shadow-lg mt-12 mx-4 py-12">
 
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg text-center">
+        <img src="{% static 'image/heal_logo.png' %}" alt="KM Healing Foundation Logo" class="w-20 h-20 mx-auto rounded-full border-4 border-gold">
+        <h1 class="text-3xl font-bold text-gray-800 mt-4">Verify Your Email</h1>
+        <p class="text-gray-600 mt-2">Thank you for registering with KM Healing Foundation. A verification link has been sent to your registered email address.</p>
 
-    <div class="bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 min-h-screen flex items-center justify-center">
-        <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
-            {% for message in messages %}
-            {% if message.tags == 'success' %}
-                <div style="color: #0ec435;">{{ message }}</div>
-            {% else %}
-                <div style="color: #c00427;">{{ message }}</div>
-            {% endif %}
-        {% endfor %}
-            <!-- Logo -->
-            <div class="text-center">
-                <img src="{% static 'image/userprofile.jpg' %}" alt="Heal Logo" class="w-20 mx-auto">
-                <h2 class="text-2xl font-semibold text-gray-800 mt-4">Welcome Back</h2>
-                <p class="text-gray-600">Log in to continue your healing journey.</p>
-            </div>
-
-            <!-- Form -->
-            <form class="mt-6" action="/login" method="POST">
-                {% csrf_token %}
-                <!-- Email Field -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">Username</label>
-                    <input type="username" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
-                        placeholder="Enter your username" name="username" required/>
-                </div>
-
-                <!-- Password Field -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">Password</label>
-                    <input type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none input-focus"
-                        placeholder="Enter your password" name="pass" required/>
-                </div>
-
-                <!-- Login Button -->
-                <button type="submit"
-                    class="w-full py-2 mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold rounded-lg shadow-md hover-scale">
-                    Log In
-                </button>
-            </form>
-
-            <!-- Sign Up Link -->
-            <div class="mt-4 text-center">
-                <p class="text-gray-600">
-                    Don’t have an account?
-                    <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Sign Up</a>
-                </p>
-            </div>
+        <div class="mt-6">
+            <p class="text-gray-700 font-medium">Please follow these steps:</p>
+            <ul class="list-disc list-inside text-left mt-4 text-gray-700">
+                <li>Go to your email inbox.</li>
+                <li>Find the email with the subject line <strong>"Email Verification"</strong>.</li>
+                <li>Click on the verification link provided in the email.</li>
+            </ul>
         </div>
+
+        <p class="mt-6 text-gray-700">After verification, you can log in and proceed with your journey.</p>
+
+        <a href="{% url 'login' %}" class="mt-8 inline-block bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-6 rounded-lg font-semibold hover-scale">
+            Go to Login
+        </a>
+
+        <p class="mt-4 text-gray-600 text-sm">Didn't receive the email? <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Register again</a></p>
     </div>
-
-
+</div>
     <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Upper Section: Quick Links and About -->
@@ -238,8 +201,7 @@
             </div>
         </div>
     </footer>
-
-
+    
 
     <script>
 
@@ -251,7 +213,6 @@
             dropdown.classList.toggle('hidden');
         });
     </script>
-
 </body>
 
 </html>

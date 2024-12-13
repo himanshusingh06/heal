@@ -13,7 +13,7 @@
     rel="stylesheet">
   <style>
     body {
-      background-color: #E5F7ED;
+      background-color: #f6fbf8;
     }
 
     .sidebar-button {
@@ -48,7 +48,7 @@
 
 <body class="font-sans">
     <!-- Navbar -->
-    <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 rounded-b-lg">
+    <nav class="bg-[#2E8B57] text-white shadow-lg top-0 z-50 rounded-b-lg">
       <div class="container mx-auto flex items-center justify-between p-4">
         <!-- Logo and Title -->
         <div class="flex items-center space-x-3">
@@ -138,7 +138,7 @@
       class="w-64 bg-white shadow-lg fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:static transition-transform z-40">
       <div class="p-6">
         <div class="text-center">
-          <img src="https://via.placeholder.com/150" alt="User Avatar" class="w-24 h-24 mx-auto rounded-full">
+          <img src="{% static 'image/userprofile.jpg' %}" alt="User Avatar" class="w-24 h-24 mx-auto rounded-full">
           <h2 class="mt-4 text-xl font-semibold text-gray-800">{{ user.username }}</h2>
           <p class="text-gray-500">{{ user.get_full_name }}</p>
         </div>
@@ -168,7 +168,7 @@
     <!-- Main Content -->
     <main class="flex-1 p-8">
       <!-- Sections -->
-      <section id="details" class="content-section mb-8 bg-white shadow p-6 rounded-lg hidden">
+      <section id="details" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
         <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Personal Details</h2>
         <div class="mt-4">
           <p><span class="font-medium text-gray-600">Username:</span> {{ user.username }} </p>
@@ -179,7 +179,7 @@
 
 
 
-      <section id="services" class="content-section mb-8 bg-white shadow p-6 rounded-lg hidden">
+      <section id="services" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
         <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Booking History</h2>
         <ul class="space-y-4">
           {% for booking in bookings %}
@@ -210,7 +210,7 @@
 
 
 
-      <section id="payment-status" class="content-section mb-8 bg-white shadow p-6 rounded-lg hidden">
+      <section id="payment-status" class="content-section mb-8 bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
         <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Payment Status</h2>
         <div class="mt-4">
           <p><span class="font-medium text-gray-600">Total Amount Paid:</span> No data found</p>
@@ -218,7 +218,7 @@
         </div>
       </section>
 
-      <section id="order-history" class="content-section bg-white shadow p-6 rounded-lg hidden">
+      <section id="order-history" class="content-section bg-[#E1F5EA] shadow p-6 rounded-lg hidden">
         <h2 class="text-lg font-semibold border-b pb-2 text-gray-800">Order History</h2>
         <table class="w-full mt-4 border">
           <thead>

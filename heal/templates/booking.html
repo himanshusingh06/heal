@@ -31,7 +31,7 @@
 
 <body class="font-sans antialiased">
     <!-- Navbar -->
-    <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 rounded-b-lg">
+    <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 border-2 rounded-b-lg">
       <div class="container mx-auto flex items-center justify-between p-4">
         <!-- Logo and Title -->
         <div class="flex items-center space-x-3">
@@ -109,7 +109,7 @@
   <div class="container mx-auto px-4 py-8 md:py-16">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Booked Session Details -->
-      <div class="bg-white rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
         <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Your Booking</h2>
         <div class="p-6">
           <h3 class="text-2xl font-bold text-[#205A28] mb-4">{{ service.title }}</h3>
@@ -127,7 +127,7 @@
       </div>
 
       <!-- Booking Form -->
-      <div class="bg-white rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-green-100">
         <h2 class="text-2xl font-bold text-[#205A28] border-b pb-4 mb-6">Make a Booking</h2>
         <form  action="{% url 'book_session' service.id %}" method="POST" class="space-y-6">
           {% csrf_token %}
@@ -353,6 +353,12 @@
     function closeTerms() {
       document.getElementById('termsModal').classList.add('hidden');
     }
+    const menuToggle = document.getElementById('menu-toggle');
+        const dropdown = document.getElementById('dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
 
 
   </script>
