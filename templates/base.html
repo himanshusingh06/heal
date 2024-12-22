@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Common Styles -->
+    <script src="{% static 'js/tailwind.js' %}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Page-Specific Styles -->
+    {% block styles %}
+    {% endblock %}
+</head>
+
+<body class="bg-[#F4F4F4] text-[#2E8B57]">
+    
+    {% block header %}
+    {% endblock %}
+    
+
+
+    <nav class="bg-white rounded-lg shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-6 py-4">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-12 h-12 rounded-full border-2 border-[#2E8B57]">
+                <h1 class="text-xl font-bold text-[#2E8B57]">KM Healing Foundation</h1>
+            </div>
+            <!-- Menu -->
+            <ul class="hidden md:flex items-center space-x-6 text-lg font-medium text-gray-700">
+                <li><a href="{% url 'home' %}" class="hover:text-[#2E8B57]">Home</a></li>
+                <li><a href="{% url 'services' %}" class="hover:text-[#2E8B57]">Services</a></li>
+                <li><a href="{% url 'contact' %}" class="hover:text-[#2E8B57]">Contact</a></li>
+            </ul>
+            <!-- Search and CTA -->
+            <div class="hidden md:flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                {% if request.user.is_staff %}
+
+                <a href="{% url 'admin_dashboard' %}" 
+                    class="bg-[#2E8B57] text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md">Profile</a>
+                {% else %}
+                <a href="{% url 'profile' %}" 
+                    class="bg-[#2E8B57] text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md">Profile</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" 
+                    class="bg-[#2E8B57] text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" 
+                    class="bg-[#2E8B57] text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md">Login</a>
+                <a href="{% url 'register' %}" 
+                    class="bg-[#2E8B57] text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md">Signup</a>
+                {% endif %}
+            </div>
+            <!-- Hamburger Button -->
+            <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
+                ☰
+            </button>
+        </div>
+        <!-- Dropdown Menu for Small Screens -->
+        <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-white p-4 rounded-lg shadow-md md:hidden">
+            <li><a href="{% url 'home' %}" class="block hover:text-[#2E8B57]">Home</a></li>
+            <li><a href="{% url 'services' %}" class="block hover:text-[#2E8B57]">Services</a></li>
+            <li><a href="{% url 'contact' %}" class="block hover:text-[#2E8B57]">Contact Us</a></li>
+            {% if user.is_authenticated %}
+            {% if request.user.is_staff %}
+            <li><a href="{% url 'admin_dashboard' %}" class="block hover:text-[#2E8B57]">Profile</a></li>
+            {% else %}
+            <li><a href="{% url 'profile' %}" class="block hover:text-[#2E8B57]">Profile</a></li>
+            {% endif %}
+            <li><a href="{% url 'logout' %}" class="block hover:text-[#2E8B57]">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="block hover:text-[#2E8B57]">Login</a></li>
+            <li><a href="{% url 'register' %}" class="block hover:text-[#2E8B57]">Signup</a></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+      <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Upper Section: Quick Links and About -->
+            <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
+                <!-- About Us -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
+                    <ul class="space-y-2">
+                        <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
+                        <li><strong>CEO:</strong> Shivani Arora</li>
+                        <li><strong>Support:</strong> Shveta Arora</li>
+                        <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services Offered -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a>
+                        </li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body
+                                Processes</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">yoga</a></li>
+                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">meru</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Middle Section: Social Media and Map -->
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
+                <!-- Social Media Links -->
+                <div>
+                    <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
+                                class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
+                    <iframe class="w-full h-full"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
+                <p>&copy; 2024 Heal. All rights reserved.</p>
+                <p>Waiting for copyright</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Common Scripts -->
+    <script src="{% static 'js/common.js' %}"></script>
+
+    <!-- Page-Specific Scripts -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+
+</html>

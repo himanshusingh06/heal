@@ -19,5 +19,112 @@ where to add disclamer
 they will ask for website details for giving payment gateway
 
 
+to not to send password reset if user id not verified
+still its okkk its not sending email but the page is being rendered
 
 
+check if user can still send reset password even if the user are not verified
+
+display services name in admin dash
+
+messages in confirm password for reset
+
+install and use tailwind for production level in django
+use firebase s3 bucket to serve static and media files
+
+
+
+
+
+
+login
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+KM Healing Foundation -Login
+{% endblock %}
+{% block styles %}
+    <style>
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .input-focus:focus {
+            box-shadow: 0 0 8px #60a5fa;
+        }
+            body {
+                font-family: 'Inter', sans-serif;
+              }
+          
+              h1,
+              h2 {
+                font-family: 'Playfair Display', serif;
+              }
+              .text-gold {
+                color: #FFD700; /* Gold color */
+              }
+              .border-gold {
+                border-color: #FFD700; /* Gold border */
+              }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-[#F4F4F4] text-[#2E8B57]">
+
+
+    <div class="bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 min-h-screen flex items-center justify-center rounded-lg shadow-lg mt-12 mx-4 py-12">
+        <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div style="color: #0ec435;">{{ message }}</div>
+            {% else %}
+                <div style="color: #c00427;">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+            <!-- Logo -->
+            <div class="text-center">
+                <img src="{% static 'image/userprofile.jpg' %}" alt="Heal Logo" class="w-20 mx-auto">
+                <h2 class="text-2xl font-semibold text-gray-800 mt-4">Welcome Back</h2>
+                <p class="text-gray-600">Log in to continue your healing journey.</p>
+            </div>
+
+            <!-- Form -->
+            <form class="mt-6" action="/login" method="POST">
+                {% csrf_token %}
+                <!-- Email Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Username</label>
+                    <input type="username" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none input-focus text-gray-700"
+                        placeholder="Enter your username" name="username" required/>
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Password</label>
+                    <input type="password" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none input-focus text-gray-700"
+                        placeholder="Enter your password" name="pass" required/>
+                </div>
+                <a href="{% url 'reset_password' %}" class="text-blue-500 hover:underline">forgot password</a>
+
+                <!-- Login Button -->
+                <button type="submit"
+                    class="w-full py-2 mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold rounded-lg shadow-md hover-scale">
+                    Log In
+                </button>
+            </form>
+
+            <!-- Sign Up Link -->
+            <div class="mt-4 text-center">
+                <p class="text-gray-600">
+                    Don’t have an account?
+                    <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Sign Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,134 +1,53 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+KM Healing Foundation -Services
+{% endblock %}
+{% block scripts %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>KM healing foundation-Our Services</title>
-  <script src="{% static 'js/tailwind.js' %}"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap"
-    rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+{% endblock %}
+{% block styles %}
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
 
-    h1,
-    h2 {
-      font-family: 'Playfair Display', serif;
-    }
-    .bg-primary {
-      background-color: #EAF8F0;
-    }
+  h1,
+  h2 {
+    font-family: 'Playfair Display', serif;
+  }
 
-    .bg-button {
-      background-color: #205A28;
-    }
+  .bg-primary {
+    background-color: #EAF8F0;
+  }
 
-    .bg-button-hover:hover {
-      background-color: #15491c;
-    }
+  .bg-button {
+    background-color: #205A28;
+  }
 
-    .modal-bg {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .text-gold {
-      color: #FFD700; /* Gold color */
-    }
-    .border-gold {
-      border-color: #FFD700; /* Gold border */
-    }
-  </style>
-</head>
+  .bg-button-hover:hover {
+    background-color: #15491c;
+  }
 
-<body class="bg-gray-100">
+  .modal-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 
-  <!-- Navigation Bar -->
-  <nav class="bg-[#2E8B57] text-white shadow-lg sticky top-0 z-50 rounded-b-lg">
-    <div class="container mx-auto flex items-center justify-between p-4">
-      <!-- Logo and Title -->
-      <div class="flex items-center space-x-3">
-        <img src="{% static 'image/heal_logo.png' %}" alt="Logo" class="w-10 h-10 rounded-full border-2 border-gold">
-        <h1 class="text-3xl font-bold tracking-wide text-gold">KM Healing Foundation</h1>
-      </div>
-      <!-- Hamburger Button -->
-      <button id="menu-toggle" class="text-3xl md:hidden focus:outline-none">
-        ☰
-      </button>
-      <!-- Menu -->
-      <ul id="menu" class="hidden md:flex space-x-6 text-lg font-semibold">
-        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
-        <li><a href="{% url 'services' %}" class="hover:underline">Services</a></li>
-        <li><a href="{% url 'contact' %}" class="hover:underline">Contact</a></li>
-        <div class="flex space-x-4">
-          {% if user.is_authenticated %}
-          {% if request.user.is_staff %}
-          <a href="{% url 'admin_dashboard' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Profile
-          </a>
-            {% else %}
-            <a href="{% url 'profile' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Profile
-          </a>
-            {% endif %}
-          <a href="{% url 'logout' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Logout
-          </a>
+  .text-gold {
+    color: #FFD700;
+    /* Gold color */
+  }
 
-          {% else %}
-          <a href="{% url 'login' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Login
-          </a>
-          <a href="{% url 'register' %}"
-            class="bg-white text-[#2E8B57] px-4 py-2 rounded-lg font-semibold hover:bg-gray-200">
-            Signup
-          </a>
+  .border-gold {
+    border-color: #FFD700;
+    /* Gold border */
+  }
+</style>
+{% endblock %}
 
-          {% endif %}
-
-        </div>
-
-      </ul>
-    </div>
-    <!-- Dropdown for Small Screens -->
-    <ul id="dropdown" class="hidden flex-col mt-4 space-y-2 bg-[#2E8B57] p-4 md:hidden rounded-b-lg">
-      <li><a href="{% url 'home' %}" class="hover:underline block">Home</a></li>
-      <li><a href="{% url 'services' %}" class="hover:underline block">Services</a></li>
-      <li><a href="{% url 'contact' %}" class="hover:underline block">Contact</a></li>
-      {% if user.is_authenticated %}
-            {% if request.user.is_staff %}
-            <a href="{% url 'admin_dashboard' %}" class="hover:underline block">profile</a>
-            {% else %}
-            <li><a href="{% url 'profile' %}" class="hover:underline block">Profile</a></li>
-            {% endif %}
-      
-      <li><a href="{% url 'logout' %}" class="hover:underline block">Logout</a></li>
-      
-      {% else %}
-      <li><a href="{% url 'login' %}" class="hover:underline block">Login</a></li>
-      <li><a href="{% url 'register' %}" class="hover:underline block">Signup</a></li>
-      
-
-      {% endif %}
-
-    </ul>
-  </nav>
-
-  <!-- Services Section -->
-
-
-
-
+{% block content %}
+<div class="bg-[#F4F4F4] text-[#2E8B57]">
 
   <section class="bg-primary py-12 mt-12 rounded-lg shadow-lg mx-4">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,96 +77,28 @@
               </li>
               <li><strong>Price:</strong> ₹{{ service.price }}</li>
             </ul>
-            <a href="{% url 'booksession' service.id %}"class="bg-button text-white py-2 px-4 rounded-lg bg-button-hover transition-all">Book Now</a>
+            <a href="{% url 'booksession' service.id %}"
+              class="bg-button text-white py-2 px-4 rounded-lg bg-button-hover transition-all">Book Now</a>
           </div>
         </div>
         {% endfor %}
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden relative">
+          <!-- Coming Soon Label -->
+          <div class="absolute top-4 left-4 bg-red-400 text-white font-semibold text-sm px-3 py-1 rounded-lg shadow-md">
+            Coming Soon
+          </div>
+          <img src="{% static 'image/coun.webp' %}" alt="Counselling" class="w-full h-56 object-cover">
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-[#205A28] mb-4">Counselling Service</h3>
+            <p class="text-gray-700 mb-4">We are excited to offer professional counselling services soon to help guide you through challenging moments in life. Stay tuned for more details!</p>
+
+            
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-[#E1F5EA] py-12 text-gray-900 rounded-lg shadow-lg mt-12 mx-4">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Upper Section: Quick Links and About -->
-      <div class="flex flex-col lg:flex-row lg:justify-between gap-8">
-        <!-- About Us -->
-        <div>
-          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Info</h3>
-          <ul class="space-y-2">
-            <li><strong>MD:</strong> Sh. Rajnish Kumar Arora</li>
-            <li><strong>CEO:</strong> Shivani Arora</li>
-            <li><strong>Support:</strong> Shveta Arora</li>
-            <li><strong>Location:</strong> Zirakpur<br> opening soon in banglore and delhi NCR</li>
-          </ul>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Quick Links</h3>
-          <ul class="space-y-2">
-            <li><a href="{% url 'home' %}" class="hover:text-blue-400">Home</a></li>
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">Services</a></li>
-            <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Contact</a></li>
-          </ul>
-        </div>
-
-        <!-- Services Offered -->
-        <div>
-          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Our Services</h3>
-          <ul class="space-y-2">
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">Craniosacral Therapy (CST)</a></li>
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">Batch Flower Remedies</a></li>
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">Access Bar: Face Lift & Body Processes</a></li>
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">yoga</a></li>
-            <li><a href="{% url 'services' %}" class="hover:text-blue-400">meru</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Middle Section: Social Media and Map -->
-      <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-12 gap-8">
-        <!-- Social Media Links -->
-        <div>
-          <h3 class="text-2xl font-bold text-[#205A28] mb-4">Follow Us</h3>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
-                class="fab fa-facebook fa-lg"></i></a>
-            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
-                class="fab fa-instagram fa-lg"></i></a>
-            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
-                class="fab fa-twitter fa-lg"></i></a>
-            <a href="#" class="text-gray-600 hover:text-blue-400" target="_blank"><i
-                class="fab fa-linkedin fa-lg"></i></a>
-          </div>
-        </div>
-
-        <!-- Map View -->
-        <div class="w-full md:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg border-2 border-gray-700">
-          <iframe class="w-full h-full"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3476.1735365217566!2d76.82471821474484!3d30.649940581666734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec10cf1f9f8f%3A0x7474a7497efeb0b0!2sZirakpur%2C%20Punjab!5e0!3m2!1sen!2sin!4v1690013343434!5m2!1sen!2sin"
-            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-
-      <!-- Bottom Section -->
-      <div class="mt-12 border-t border-[#205A28] pt-6 text-center text-[#205A28]">
-        <p>&copy; 2024 Heal. All rights reserved.</p>
-        <p>Waiting for copyright</p>
-      </div>
-    </div>
-  </footer>
-
-
-  <script>
-    // Open modal function
-    const menuToggle = document.getElementById('menu-toggle');
-    const dropdown = document.getElementById('dropdown');
-    menuToggle.addEventListener('click', () => {
-      dropdown.classList.toggle('hidden');
-    });
-  </script>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
