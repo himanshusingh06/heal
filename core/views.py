@@ -63,81 +63,141 @@ def contact(request):
 
 
 # Register view
+# from django.contrib.auth.models import User
+# from django.contrib import messages
+# from django.shortcuts import render, redirect
+# from django.core.exceptions import ValidationError
+# from django.contrib.auth.password_validation import validate_password
+
+# def register(request):
+#     if request.method == 'POST':
+#         uname = request.POST.get('username')
+#         email = request.POST.get('email')
+#         first_name = request.POST.get('f_name')
+#         last_name = request.POST.get('l_name')
+#         pass1 = request.POST.get('password1')
+#         pass2 = request.POST.get('password2')
+
+#         # Check if username is already taken
+#         if User.objects.filter(username=uname).exists():
+#     # Check if the username is associated with an unverified user
+#             existing_user_by_username = User.objects.filter(username=uname).first()
+#             if existing_user_by_username:
+#                 verified_obj = Verified.objects.filter(user=existing_user_by_username).first()
+#                 if verified_obj and not verified_obj.is_verified:
+#             # Delete unverified user
+#                     existing_user_by_username.delete()
+#                 else:
+#                     messages.error(request, "Username already exists!")
+#                     return redirect('register')
+
+# # Check if the email is registered and verified
+#         existing_user_by_email = User.objects.filter(email=email).first()
+#         if existing_user_by_email:
+#             verified_obj = Verified.objects.filter(user=existing_user_by_email).first()
+#             if verified_obj and verified_obj.is_verified:
+#                 messages.error(request, "Email already exists!")
+#                 return redirect('register')
+#             else:
+#         # Delete unverified user
+#                 existing_user_by_email.delete()
+#         # Check if passwords match
+#         if pass1 != pass2:
+#             messages.error(request, "Your password and confirm password are not the same!")
+#             return redirect('register')
+
+#         # Validate password strength
+#         try:
+#             validate_password(pass1)  # Raises ValidationError for weak passwords
+#         except ValidationError as e:
+#             for error in e:
+#                 messages.error(request, error)
+#             return redirect('register')
+
+#         # Save the User object but keep it inactive
+#         my_user = User(
+#             username=uname,
+#             email=email,
+#             first_name=first_name,
+#             last_name=last_name,
+#             is_active=False  # User is inactive by default
+#         )
+#         my_user.set_password(pass1)
+#         my_user.save()
+
+#         # Create Verified object
+#         v_obj = Verified.objects.create(
+#             user=my_user,
+#             email_token=str(uuid.uuid4())
+#         )
+
+#         # Send email token
+#         send_email_token(email, v_obj.email_token)
+
+#         return render(request, 'verify_email.html')
+
+#     else:
+#         return render(request, 'signup.html')
+
+
+
 from django.contrib.auth.models import User
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.core.exceptions import ValidationError
-from django.contrib.auth.password_validation import validate_password
+from django.shortcuts import render
+from .forms import UserRegistrationForm
+from .models import Verified
+import uuid
+from .utils import send_email_token
 
 def register(request):
     if request.method == 'POST':
-        uname = request.POST.get('username')
-        email = request.POST.get('email')
-        first_name = request.POST.get('f_name')
-        last_name = request.POST.get('l_name')
-        pass1 = request.POST.get('password1')
-        pass2 = request.POST.get('password2')
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
 
-        # Check if username is already taken
-        if User.objects.filter(username=uname).exists():
-    # Check if the username is associated with an unverified user
-            existing_user_by_username = User.objects.filter(username=uname).first()
-            if existing_user_by_username:
-                verified_obj = Verified.objects.filter(user=existing_user_by_username).first()
-                if verified_obj and not verified_obj.is_verified:
-            # Delete unverified user
-                    existing_user_by_username.delete()
-                else:
-                    messages.error(request, "Username already exists!")
-                    return redirect('register')
+            # Check and handle unverified users with the same username
+            unverified_user_by_username = User.objects.filter(username=username, is_active=False).first()
+            if unverified_user_by_username:
+                # Delete unverified user and their associated verification object
+                Verified.objects.filter(user=unverified_user_by_username).delete()
+                unverified_user_by_username.delete()
 
-# Check if the email is registered and verified
-        existing_user_by_email = User.objects.filter(email=email).first()
-        if existing_user_by_email:
-            verified_obj = Verified.objects.filter(user=existing_user_by_email).first()
-            if verified_obj and verified_obj.is_verified:
-                messages.error(request, "Email already exists!")
-                return redirect('register')
-            else:
-        # Delete unverified user
-                existing_user_by_email.delete()
-        # Check if passwords match
-        if pass1 != pass2:
-            messages.error(request, "Your password and confirm password are not the same!")
-            return redirect('register')
+            # Check and handle unverified users with the same email
+            unverified_user_by_email = User.objects.filter(email=email, is_active=False).first()
+            if unverified_user_by_email:
+                # Delete unverified user and their associated verification object
+                Verified.objects.filter(user=unverified_user_by_email).delete()
+                unverified_user_by_email.delete()
 
-        # Validate password strength
-        try:
-            validate_password(pass1)  # Raises ValidationError for weak passwords
-        except ValidationError as e:
-            for error in e:
-                messages.error(request, error)
-            return redirect('register')
+            # Check for active users with the same username or email
+            if User.objects.filter(username=username, is_active=True).exists():
+                form.add_error('username', 'This username is already taken.')
+                return render(request, 'signup.html', {'form': form})
+            if User.objects.filter(email=email, is_active=True).exists():
+                form.add_error('email', 'An account with this email already exists.')
+                return render(request, 'signup.html', {'form': form})
 
-        # Save the User object but keep it inactive
-        my_user = User(
-            username=uname,
-            email=email,
-            first_name=first_name,
-            last_name=last_name,
-            is_active=False  # User is inactive by default
-        )
-        my_user.set_password(pass1)
-        my_user.save()
+            # Create the new user
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password1'])
+            user.is_active = False
+            user.save()
 
-        # Create Verified object
-        v_obj = Verified.objects.create(
-            user=my_user,
-            email_token=str(uuid.uuid4())
-        )
+            # Create a verification object and send email
+            verification_token = str(uuid.uuid4())
+            Verified.objects.create(user=user, email_token=verification_token)
+            send_email_token(user.email, verification_token)
 
-        # Send email token
-        send_email_token(email, v_obj.email_token)
-
-        return render(request, 'verify_email.html')
-
+            return render(request, 'verify_email.html', {
+                'message': 'Account created successfully! Please check your email for verification.'
+            })
+        else:
+            return render(request, 'signup.html', {'form': form})
     else:
-        return render(request, 'signup.html')
+        form = UserRegistrationForm()
+    return render(request, 'signup.html', {'form': form})
+
+
 
         
 
@@ -160,28 +220,52 @@ def verify(request, token):
         
 
 # Login view
+# def login(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('pass')
+#         # Authenticate user
+#         user = authenticate(request, username=username, password=password)
+
+#         # Check if user exists
+#         if user is None:
+#             messages.error(request, "Invalid UserName or Password.")
+#         else:
+#             # User exists, check password
+#             if user.check_password(password):
+#                 # Password is correct, log in user
+#                 auth.login(request, user)
+#                 return redirect('home')
+#             else:
+#                 # Incorrect password
+#                 messages.error(request, "Invalid UserName or Password.")
+
+
+#     return render(request, 'login.html')
+    
+
+
+from django.contrib.auth import login as auth_login
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import LoginForm
+
 def login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('pass')
-        # Authenticate user
-        user = authenticate(request, username=username, password=password)
-
-        # Check if user exists
-        if user is None:
-            messages.error(request, "Invalid UserName or Password.")
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # Use the user instance stored in the form's clean method
+            user = form.user
+            auth_login(request, user)
+            return redirect('home')  # Redirect to home after successful login
         else:
-            # User exists, check password
-            if user.check_password(password):
-                # Password is correct, log in user
-                auth.login(request, user)
-                return redirect('home')
-            else:
-                # Incorrect password
-                messages.error(request, "Invalid UserName or Password.")
+            # Form is invalid; show errors
+            messages.error(request, "Invalid credentials or CAPTCHA failed.")
+    else:
+        form = LoginForm()
 
+    return render(request, 'login.html', {'form': form})
 
-    return render(request, 'login.html')
 
 # Logout view
 def logout(request):
@@ -317,73 +401,6 @@ def user_detail(request, user_id):
 
 
 
-# @login_required(login_url='login')
-# @user_passes_test(is_admin)
-
-# def manage_services(request):
-#     message = None
-#     if request.method == "POST":
-#         action = request.POST.get("action")
-#         try:
-#             if action == "add":
-#                 # Add a new service
-#                 service = Service(
-#                     title=request.POST.get("title"),
-#                     description=request.POST.get("description"),
-#                     duration=request.POST.get("duration"),
-#                     mode_of_service=request.POST.get("mode_of_service"),
-#                     from_date=request.POST.get("from_date"),
-#                     to_date=request.POST.get("to_date"),
-#                     time_from=request.POST.get("time_from"),
-#                     time_to=request.POST.get("time_to"),
-#                     location=request.POST.get("location"),
-#                     instructor=request.POST.get("instructor"),
-#                     price=request.POST.get("price"),
-#                 )
-#                 if 'image' in request.FILES:
-#                     service.image = request.FILES['image']
-#                 service.save()
-#                 message = "Service added successfully!"
-
-#             elif action == "edit":
-#                 # Edit an existing service
-#                 service_id = request.POST.get("service_id")
-#                 service = get_object_or_404(Service, id=service_id)
-#                 service.title = request.POST.get("title")
-#                 service.description = request.POST.get("description")
-#                 service.duration = request.POST.get("duration")
-#                 service.mode_of_service = request.POST.get("mode_of_service")
-#                 service.from_date = request.POST.get("from_date")
-#                 service.to_date = request.POST.get("to_date")
-#                 service.time_from = request.POST.get("time_from")
-#                 service.time_to = request.POST.get("time_to")
-#                 service.location = request.POST.get("location")
-#                 service.instructor = request.POST.get("instructor")
-#                 service.price = request.POST.get("price")
-#                 if 'image' in request.FILES:
-#                     service.image = request.FILES['image']
-#                 service.save()
-#                 message = "Service updated successfully!"
-
-#             elif action == "delete":
-#                 # Delete a service
-#                 service_id = request.POST.get("service_id")
-#                 service = get_object_or_404(Service, id=service_id)
-#                 service.delete()
-#                 message = "Service deleted successfully!"
-
-#             else:
-#                 message = "Invalid action."
-
-#         except Exception as e:
-#             message = f"An error occurred: {str(e)}"
-
-#     services = Service.objects.all()
-#     return render(request, 'manage_services.html', {'services': services, 'message': message})
-
-
-
-
 @login_required(login_url='login')
 @user_passes_test(is_admin)
 def manage_services(request):
@@ -410,39 +427,13 @@ def add_service(request):
                 instructor=request.POST.get("instructor"),
                 price=request.POST.get("price"),
             )
-            if 'image' in request.FILES:
-                service.image = request.FILES['image']
+            # if 'image' in request.FILES:
+            #     service.image = request.FILES['image']
             service.save()
             messages.success(request, "Service added successfully!")
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
     return redirect('manage_services')
-
-# @login_required(login_url='login')
-# @user_passes_test(is_admin)
-# def edit_service(request, service_id):
-#     """View to edit an existing service"""
-#     service = get_object_or_404(Service, id=service_id)
-#     if request.method == "POST":
-#         try:
-#             service.title = request.POST.get("title")
-#             service.description = request.POST.get("description")
-#             service.duration = request.POST.get("duration")
-#             service.mode_of_service = request.POST.get("mode_of_service")
-#             service.from_date = request.POST.get("from_date")
-#             service.to_date = request.POST.get("to_date")
-#             service.time_from = request.POST.get("time_from")
-#             service.time_to = request.POST.get("time_to")
-#             service.location = request.POST.get("location")
-#             service.instructor = request.POST.get("instructor")
-#             service.price = request.POST.get("price")
-#             if 'image' in request.FILES:
-#                 service.image = request.FILES['image']
-#             service.save()
-#             messages.success(request, "Service updated successfully!")
-#         except Exception as e:
-#             messages.error(request, f"An error occurred: {str(e)}")
-#     return redirect('manage_services')
 
 @login_required(login_url='login')
 @user_passes_test(is_admin)

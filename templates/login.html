@@ -57,32 +57,159 @@ KM Healing Foundation -Login
             </div>
 
             <!-- Form -->
-            <form class="mt-6" action="/login" method="POST">
+            <form class="mt-6" method="POST" action="{% url 'login' %}">
                 {% csrf_token %}
-                <!-- Email Field -->
+                    
+                <!-- Username Field -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">Username</label>
-                    <input type="username"
-                        class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none input-focus text-gray-700"
-                        placeholder="Enter your username" name="username" required />
+                    <label for="captcha label" class="text-gray-800 font-medium">{{ form.username.label_tag }}</label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <span class="text-red-500 text-sm">{{ error }}</span>
+                    {% endfor %}
                 </div>
-
+            
                 <!-- Password Field -->
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">Password</label>
-                    <input type="password"
-                        class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none input-focus text-gray-700"
-                        placeholder="Enter your password" name="pass" required />
+                    <label for="captcha label" class="text-gray-800 font-medium">{{ form.password.label_tag }}</label>
+                    {{ form.password }}
+                    {% for error in form.password.errors %}
+                        <span class="text-red-500 text-sm">{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <a href="{% url 'reset_password' %}" class="text-blue-500 hover:underline">forgot password</a>
-
+            
+                <!-- CAPTCHA -->
+                <div class="mb-4">
+                    <label for="captcha label" class="text-gray-800 font-medium">{{ form.captcha.label_tag }}</label>
+                    {{ form.captcha }}
+                    {% for error in form.captcha.errors %}
+                        <span class="text-red-500 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            
+                <!-- Agreement Checkbox -->
+                <div class="mt-4 flex items-start">
+                    <input type="checkbox" id="agree" name="agree" class="mt-1 mr-2" required>
+                    <label for="agree" class="text-gray-700">
+                        I agree to the
+                    </label>
+                    <div class="ml-1">
+                        <span class="text-blue-500 hover:underline cursor-pointer" onclick="showTerms('userAgreement')">User Agreement</span>
+                        <span class="text-gray-600">and</span>
+                        <span class="text-blue-500 hover:underline cursor-pointer" onclick="showTerms('privacyPolicy')">Privacy Policy</span>.
+                    </div>
+                </div>
+            
                 <!-- Login Button -->
                 <button type="submit"
-                    class="w-full py-2 mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold rounded-lg shadow-md hover-scale">
+                    class="w-full py-2 mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold rounded-lg shadow-md transform hover:scale-105 transition">
                     Log In
                 </button>
             </form>
-
+            
+            
+            <!-- Modal for Terms -->
+            <div id="userAgreement" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+                <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-lg shadow-lg p-6 relative">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">User Agreement</h2>
+                    <div class="overflow-y-auto max-h-96 text-gray-700">
+                        <p><strong>Effective Date:</strong> January 1, 2025</p>
+                        <br>
+                        <p>
+                            Welcome to Heal. By using our website, services, or engaging with any content provided by Heal, you agree
+                            to the terms outlined in this User Agreement. Please read carefully before proceeding.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">1. Acceptance of Terms</h3>
+                        <p>
+                            By accessing or using Heal services, you agree to comply with and be bound by this agreement. If you do not
+                            agree, you should discontinue use immediately.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">2. Changes to the Agreement</h3>
+                        <p>
+                            Heal reserves the right to modify this agreement at any time. Continued use of our services implies
+                            acceptance of the modified terms.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">3. User Responsibilities</h3>
+                        <p>
+                            - Users must provide accurate and complete information during registration.<br>
+                            - Users agree not to engage in unlawful activities or violate any rights while using Heal services.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">4. Termination</h3>
+                        <p>
+                            Heal reserves the right to terminate user accounts for violations of this agreement or any unlawful
+                            activities.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">5. Governing Law</h3>
+                        <p>
+                            This agreement is governed by the laws of [Your Jurisdiction]. Any disputes will be resolved exclusively in
+                            [Your Jurisdiction].
+                        </p>
+                    </div>
+                    <button onclick="closeTerms('userAgreement')"
+                        class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 font-bold text-lg">&times;</button>
+                </div>
+            </div>
+            
+            <div id="privacyPolicy" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+                <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-lg shadow-lg p-6 relative">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Privacy Policy</h2>
+                    <div class="overflow-y-auto max-h-96 text-gray-700">
+                        <p><strong>Effective Date:</strong> January 1, 2025</p>
+                        <br>
+                        <p>
+                            Heal is committed to protecting your privacy. This policy outlines how we collect, use, and safeguard your
+                            information.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">1. Information We Collect</h3>
+                        <p>
+                            - Personal Information: Name, email address, phone number, etc., during registration.<br>
+                            - Usage Data: Pages visited, time spent on site, and service preferences.<br>
+                            - Payment Information: Processed securely via third-party payment processors.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">2. How We Use Your Information</h3>
+                        <p>
+                            - To provide, maintain, and improve our services.<br>
+                            - To communicate with you regarding updates, offers, and support.<br>
+                            - To comply with legal obligations and protect our rights.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">3. Data Protection</h3>
+                        <p>
+                            Heal implements industry-standard security measures to protect your data from unauthorized access,
+                            alteration, disclosure, or destruction.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">4. Sharing of Information</h3>
+                        <p>
+                            - We do not sell your personal data to third parties.<br>
+                            - Data may be shared with trusted third parties for service delivery or legal compliance.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">5. Your Rights</h3>
+                        <p>
+                            - Access and update your personal data.<br>
+                            - Request deletion of your personal data (subject to legal and contractual restrictions).<br>
+                            - Opt-out of promotional communications.
+                        </p>
+                        <br>
+                        <h3 class="font-bold text-lg">6. Changes to the Privacy Policy</h3>
+                        <p>
+                            Heal may update this Privacy Policy periodically. We encourage you to review it regularly to stay informed.
+                        </p>
+                    </div>
+                    <button onclick="closeTerms('privacyPolicy')"
+                        class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 font-bold text-lg">&times;</button>
+                </div>
+            </div>
+            
+ 
             <!-- Sign Up Link -->
             <div class="mt-4 text-center">
                 <p class="text-gray-600">
@@ -93,4 +220,14 @@ KM Healing Foundation -Login
         </div>
     </div>
 </div>
+            <!-- JavaScript for Modal -->
+            <script>
+                function showTerms(id) {
+                    document.getElementById(id).classList.remove('hidden');
+                }
+            
+                function closeTerms(id) {
+                    document.getElementById(id).classList.add('hidden');
+                }
+            </script>
 {% endblock %}

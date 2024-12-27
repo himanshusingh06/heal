@@ -10,3 +10,5 @@ class CustomPasswordResetForm(PasswordResetForm):
         if not User.objects.filter(email=email).exists():
             raise forms.ValidationError("There is no user registered with the specified email address.")
         return email
+
+

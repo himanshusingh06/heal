@@ -32,7 +32,11 @@ messages in confirm password for reset
 install and use tailwind for production level in django
 use firebase s3 bucket to serve static and media files
 
-
+callender of events
+qr codes
+terms and condittion for login..................done
+recaptca verification..........................done
+remove dynamic images make it static.................done
 
 
 

@@ -13,7 +13,7 @@ class Service(models.Model):
     description = models.TextField()
     duration = models.CharField(max_length=100, default="60 mins")  # Default duration
     mode_of_service = models.CharField(max_length=100, default="Online")  # Default mode
-    image = models.ImageField(upload_to='services/', null=True, blank=True)  # Allow blank for existing records
+    # image = models.ImageField(upload_to='services/', null=True, blank=True)  # Allow blank for existing records
     from_date = models.DateField(default=date.today)  # Default to current date
     to_date = models.DateField(default=date.today)  # Default to current date
     time_from = models.TimeField(default=time(9, 0))  # Default start time (e.g., 09:00 AM)

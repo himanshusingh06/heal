@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,13 @@ EMAIL_HOST_USER = 'himanshuks062@gmail.com'
 EMAIL_HOST_PASSWORD = 'hnjh ssav jymb krcx'
 DEFAULT_FROM_EMAIL = 'himanshuks062@gmail.com'
 ADMIN_EMAILS=['himanshusinghwork365@gmail.com']
+
+
+
+
+
+
+
+RECAPTCHA_PUBLIC_KEY = '6LeqnqYqAAAAAGM4eBkMXbrGZ38quPRb56Ku8qik'
+RECAPTCHA_PRIVATE_KEY = '6LeqnqYqAAAAAANNSySX9wpI40FUkEHqaxrknT7o'
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
