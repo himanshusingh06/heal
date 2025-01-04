@@ -119,8 +119,7 @@ KM Healing Foundation -Profile
             <p>Mode of Service: {{ booking.service_mode }}</p>
             <p>Location: {{ booking.service_location }}</p>
             <p>Instructor: {{ booking.service_instructor }}</p>
-            <p>Session Date: From {{ booking.service_date_from|date:"F j, Y" }} to {{ booking.service_date_to|date:"F j,
-              Y" }}</p>
+            <p>Session Date: From {{ booking.service_date_from|date:"F j, Y" }} to {{ booking.service_date_to|date:"F j,Y" }}</p>
             <p>Time: From {{ booking.service_time_from|time:"g:i A" }} to {{ booking.service_time_to|time:"g:i A" }}
             </p>
             <p><strong>Price:</strong> ₹{{ booking.service_price }}</p>

@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-KM Healing Foundation -Services
+KM Healing Foundation - Services
 {% endblock %}
 {% block scripts %}
-
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 {% endblock %}
 {% block styles %}
 <style>
   body {
     font-family: 'Inter', sans-serif;
+    background-color: #FBF9EB;
   }
 
   h1,
@@ -19,15 +19,15 @@ KM Healing Foundation -Services
   }
 
   .bg-primary {
-    background-color: #EAF8F0;
+    background-color: #FBF9EB;
   }
 
   .bg-button {
-    background-color: #205A28;
+    background-color: #A99402;
   }
 
   .bg-button-hover:hover {
-    background-color: #15491c;
+    background-color: #8B7D01;
   }
 
   .modal-bg {
@@ -35,23 +35,20 @@ KM Healing Foundation -Services
   }
 
   .text-gold {
-    color: #FFD700;
-    /* Gold color */
+    color: #A99402;
   }
 
   .border-gold {
-    border-color: #FFD700;
-    /* Gold border */
+    border-color: #A99402;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-[#F4F4F4] text-[#2E8B57]">
-
+<div class="bg-[#FBF9EB] text-[#A99402]">
   <section class="bg-primary py-12 mt-12 rounded-lg shadow-lg mx-4">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-[#205A28] text-center mb-6">Our Services</h2>
+      <h2 class="text-3xl font-bold text-[#A99402] text-center mb-6">Our Services</h2>
 
       <!-- Service Cards Container -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -59,13 +56,13 @@ KM Healing Foundation -Services
         <div class="bg-white shadow-lg rounded-lg overflow-hidden relative">
           <!-- Display Dates -->
           <div
-            class="absolute top-4 left-4 bg-yellow-400 text-white font-semibold text-sm px-3 py-1 rounded-lg shadow-md">
+            class="absolute top-4 left-4 bg-[#A99402] text-white font-semibold text-sm px-3 py-1 rounded-lg shadow-md">
             From: {{ service.from_date|date:"F j, Y" }}<br>
             To: {{ service.to_date|date:"F j, Y" }}
           </div>
           <img src="{% static 'image/service_default.jpeg' %}" alt="{{ service.title }}" class="w-full h-56 object-cover">
           <div class="p-6">
-            <h3 class="text-2xl font-bold text-[#205A28] mb-4">{{ service.title }}</h3>
+            <h3 class="text-2xl font-bold text-[#A99402] mb-4">{{ service.title }}</h3>
             <p class="text-gray-700 mb-4">{{ service.description }}</p>
             <ul class="space-y-2 text-gray-700 mb-4">
               <li><strong>Duration:</strong> {{ service.duration }}</li>
@@ -89,16 +86,12 @@ KM Healing Foundation -Services
           </div>
           <img src="{% static 'image/coun.webp' %}" alt="Counselling" class="w-full h-56 object-cover">
           <div class="p-6">
-            <h3 class="text-2xl font-bold text-[#205A28] mb-4">Counselling Service</h3>
+            <h3 class="text-2xl font-bold text-[#A99402] mb-4">Counselling Service</h3>
             <p class="text-gray-700 mb-4">We are excited to offer professional counselling services soon to help guide you through challenging moments in life. Stay tuned for more details!</p>
-
-            
           </div>
         </div>
-        
       </div>
     </div>
   </section>
-
 </div>
 {% endblock %}

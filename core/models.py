@@ -60,3 +60,41 @@ class Booking(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.service_title} - {self.created_at}"
 
+class Event(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    duration = models.CharField(max_length=100, default="60 mins")  # Default duration
+    mode_of_service = models.CharField(max_length=100, default="Online")  # Default mode
+    from_date = models.DateField(default=date.today)  # Default to current date
+    to_date = models.DateField(default=date.today)  # Default to current date
+    time_from = models.TimeField(default=time(9, 0))  # Default start time (e.g., 09:00 AM)
+    time_to = models.TimeField(default=time(17, 0))  # Default end time (e.g., 05:00 PM)
+    location = models.CharField(max_length=255, default="Online")  # Default location
+    instructor = models.CharField(max_length=255, default="Not Assigned")  # Default instructor
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=5, decimal_places=2)
+    closes_on = models.CharField(max_length=50, help_text="Closes on format (e.g., '2nd jan')")
+
+    def __str__(self):
+        return self.title
+    @property
+    def discounted_price(self):
+        """
+        Calculate the discounted price based on price and discount percentage.
+        """
+        if self.discount > 0:
+            return self.price - (self.price * self.discount / 100)
+        return self.price
+
+
+# service_title=service.title,
+#             service_price=service.price,
+#             service_duration=service.duration,
+#             service_mode=service.mode_of_service,
+#             service_location=service.location,
+#             service_instructor=service.instructor,
+#             service_date_from=service.from_date,
+#             service_date_to=service.to_date,
+#             service_time_from=service.time_from,
+#             service_time_to=service.time_to,

@@ -15,6 +15,8 @@ from django.contrib.auth.password_validation import validate_password
 from .models import Verified
 from .utils import *
 import uuid
+from .models import Event
+
 def services(request):
     services = Service.objects.all()  # Fetch all services from the database
     return render(request, 'services.html', {'services': services})
@@ -24,7 +26,12 @@ def services(request):
 # Create your views here.
 def home(request):
     user = request.user if request.user.is_authenticated else None
-    return render(request, 'landing.html', {'user': user})
+    events = Event.objects.all()
+    context = {
+        'events': events,
+        'user': user,
+    }
+    return render(request, 'landing.html', context)
 
 def send_mail_to_admin(user_name, user_email, mobile_number, subject, enquiry, user_message):
     # Update the message body to include the enquiry field
@@ -446,3 +453,103 @@ def delete_service(request, service_id):
     except Exception as e:
         messages.error(request, f"An error occurred: {str(e)}")
     return redirect('manage_services')
+
+
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def manage_events(request):
+    """View to display all events"""
+    events = Event.objects.all()
+    return render(request, 'manage_events.html', {'events': events})
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def add_event(request):
+    """View to add a new event"""
+    if request.method == "POST":
+        try:
+            event = Event(
+                title=request.POST.get("title"),
+                description=request.POST.get("description"),
+                start_date=request.POST.get("start_date"),
+                duration=request.POST.get("duration"),
+                timing=request.POST.get("timing"),
+                language=request.POST.get("language"),
+                price=request.POST.get("price"),
+                discount=request.POST.get("discount"),
+                closes_on=request.POST.get("closes_on"),
+            )
+            event.save()
+            messages.success(request, "Event added successfully!")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+    return redirect('manage_events')
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def delete_event(request, event_id):
+    """View to delete an event"""
+    event = get_object_or_404(Event, id=event_id)
+    try:
+        event.delete()
+        messages.success(request, "Event deleted successfully!")
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+    return redirect('manage_events')
+
+
+
+
+@login_required(login_url='login')
+def book_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        # Extract form data
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        gender = request.POST.get('gender')
+        dob = request.POST.get('dob')
+        age = request.POST.get('age')
+        terms_accepted = request.POST.get('terms') == 'on'  # Checkbox value
+
+        # Validate data
+        if not all([first_name, last_name, email, phone, gender, dob, age]):
+            messages.error(request, "All fields are required.")
+            return redirect('book_event', event_id=event_id)
+
+        if not terms_accepted:
+            messages.error(request, "You must accept the terms and conditions.")
+            return redirect('book_event', event_id=event_id)
+
+        # Save the booking using the existing Booking model
+        Booking.objects.create(
+            user=request.user,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            gender=gender,
+            date_of_birth=dob,
+            age=int(age),
+            terms_accepted=terms_accepted,
+            # Event details
+            service_title=event.title,
+            service_price=event.discounted_price,
+            service_duration=event.duration,
+            service_mode=event.mode_of_service,
+            service_location=event.location,
+            service_instructor=event.instructor,
+            service_date_from=event.from_date,
+            service_date_to=event.to_date,
+            service_time_from=event.time_from,
+            service_time_to=event.time_to,
+        )
+
+        messages.success(request, "Event successfully booked!")
+        return redirect('home')  # Redirect to homepage or booking history
+
+    return render(request, 'book_event.html', {'event': event})

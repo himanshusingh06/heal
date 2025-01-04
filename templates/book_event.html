@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+KM Healing Foundation - Book Event
+{% endblock %}
+{% block styles %}
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1,
+  h2 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .text-gold {
+    color: #FFD700;
+    /* Gold color */
+  }
+
+  .border-gold {
+    border-color: #FFD700;
+    /* Gold border */
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="bg-[#FBF9EB] text-[#A99402]">
+  <div class="container mx-auto px-4 py-8 md:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Event Details -->
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-yellow-200">
+        <h2 class="text-2xl font-bold text-[#A99402] border-b pb-4 mb-6">Event Details</h2>
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-[#A99402] mb-4">{{ event.title }}</h3>
+          <ul class="space-y-2 text-gray-700 mb-4">
+            <li><strong>Duration:</strong> {{ event.duration }}</li>
+            <li><strong>Mode:</strong> {{ event.mode_of_service }}</li>
+            <li><strong>Location:</strong> {{ event.location }}</li>
+            <li><strong>Instructor:</strong> {{ event.instructor }}</li>
+            <li><strong>Date:</strong> From {{ event.from_date|date:"F j, Y" }} to {{ event.to_date|date:"F j, Y" }}</li>
+            <li><strong>Time:</strong> From {{ event.time_from|time:"g:i A" }} to {{ event.time_to|time:"g:i A" }}</li>
+            <li><strong>Price:</strong> ₹{{ event.discounted_price }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="bg-[#E1F5EA] rounded-lg shadow-lg p-6 transition hover:shadow-xl border border-yellow-200">
+        <h2 class="text-2xl font-bold text-[#A99402] border-b pb-4 mb-6">Book This Event</h2>
+        <form action="{% url 'book_event' event.id %}" method="POST" class="space-y-6">
+          {% csrf_token %}
+          <!-- First Name -->
+          <div>
+            <label for="firstname" class="block text-gray-800 font-medium mb-2">First Name</label>
+            <input type="text" id="firstname" name="firstname" value="{{ user.first_name }}" readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700" />
+          </div>
+          <!-- Last Name -->
+          <div>
+            <label for="lastname" class="block text-gray-800 font-medium mb-2">Last Name</label>
+            <input type="text" id="lastname" name="lastname" value="{{ user.last_name }}" readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700" />
+          </div>
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-gray-800 font-medium mb-2">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700" />
+          </div>
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-gray-800 font-medium mb-2">Phone</label>
+            <input type="tel" id="phone" name="phone" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700" />
+          </div>
+          <!-- Gender -->
+          <div>
+            <label for="gender" class="block text-gray-800 font-medium mb-2">Gender</label>
+            <select id="gender" name="gender" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700">
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <!-- Date of Birth -->
+          <div>
+            <label for="dob" class="block text-gray-800 font-medium mb-2">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none text-gray-700"
+              onchange="calculateAge()" />
+          </div>
+
+          <!-- Age -->
+          <div>
+            <label for="age" class="block text-gray-800 font-medium mb-2">Age</label>
+            <input type="number" id="age" name="age" readonly
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#A99402] focus:outline-none bg-gray-100 text-gray-700" />
+          </div>
+
+          <!-- Accept Terms and Conditions -->
+          <div>
+            <label class="block text-gray-800 font-medium mb-2">Terms and Conditions</label>
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" id="terms" name="terms" required
+                class="focus:ring-2 focus:ring-[#A99402] focus:outline-none" />
+              <label for="terms" class="text-gray-700">
+                I accept the <a href="#" onclick="openTerms()" class="text-yellow-600 hover:underline">terms and
+                  conditions</a>.
+              </label>
+            </div>
+          </div>
+          <!-- Submit -->
+          <button type="submit"
+            class="w-full bg-[#A99402] hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transform hover:scale-105">
+            Book Event
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="termsModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <h2 class="text-xl font-bold text-[#A99402] mb-4">Terms and Conditions</h2>
+      <div class="text-gray-700 space-y-4 overflow-y-auto max-h-64">
+        <p>
+          1. Booking is subject to availability and confirmation by the service provider.
+        </p>
+        <p>
+          2. Cancellation charges may apply as per the company's cancellation policy.
+        </p>
+        <p>
+          3. Customers must arrive on time for booked sessions. Late arrivals may result in shortened sessions.
+        </p>
+        <p>
+          4. Payment must be completed before the session begins.
+        </p>
+        <p>
+          5. The company reserves the right to modify or cancel bookings under special circumstances.
+        </p>
+        <p>
+          For more details, contact support@example.com.
+        </p>
+      </div>
+      <button onclick="closeTerms()"
+        class="mt-4 w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded transition transform hover:scale-105">
+        Close
+      </button>
+    </div>
+</div>
+
+  {% endblock %}
+
+
+  {% block scripts %}
+  <script>
+
+    function calculateAge() {
+      const dobInput = document.getElementById('dob').value; // Get the DOB value
+      const ageInput = document.getElementById('age'); // Get the age field
+      const menuToggle = document.getElementById('menu-toggle');
+      const dropdown = document.getElementById('dropdown');
+
+      menuToggle.addEventListener('click', () => {
+        dropdown.classList.toggle('hidden');
+      });
+
+      if (dobInput) {
+        const dob = new Date(dobInput);
+        const today = new Date();
+
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+          age--;
+        }
+
+        ageInput.value = age; // Set the calculated age
+      } else {
+        ageInput.value = ''; // Clear the age field if DOB is empty
+      }
+    }
+    // Function to open the modal
+    function openTerms() {
+      document.getElementById('termsModal').classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeTerms() {
+      document.getElementById('termsModal').classList.add('hidden');
+    }
+  </script>
+{% endblock %}

@@ -18,5 +18,10 @@ urlpatterns = [
     # path('manage-services/edit/<int:service_id>/', views.edit_service, name='edit_service'),
     path('manage-services/delete/<int:service_id>/', views.delete_service, name='delete_service'),
     path('verify/<str:token>', views.verify, name='verify'),
+    path('manage-events/', views.manage_events, name='manage_events'),
+    path('add-event/', views.add_event, name='add_event'),
+    path('delete-event/<int:event_id>/', views.delete_event, name='delete_event'),
+    path('events/<int:event_id>/book/', views.book_event, name='book_event'),
+
 
 ]
